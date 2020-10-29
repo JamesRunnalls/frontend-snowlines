@@ -8,7 +8,6 @@ class Home extends Component {
     document.title = "Snowlines";
     return (
       <React.Fragment>
-        <main>
           <div className="pagecenter">
             <img
               src={logo}
@@ -25,7 +24,6 @@ class Home extends Component {
           <div className="main">
             <Basemap />
           </div>
-        </main>
       </React.Fragment>
     );
   }

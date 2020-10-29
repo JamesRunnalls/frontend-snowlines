@@ -6,6 +6,7 @@ import NotFound from "./pages/notfound/notfound";
 
 class App extends Component {
   render() {
+    console.log("Firing app")
     return (
       <BrowserRouter>
         <Switch>
