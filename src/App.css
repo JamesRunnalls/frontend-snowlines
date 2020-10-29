@@ -1,0 +1,19 @@
+main {
+  width: 960px;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  min-height: calc(100vh - 235px);
+}
+
+@media screen and (max-width: 500px) {
+  main {
+    margin-bottom: 70px;
+    min-height: calc(100vh - 120px);
+  }
+}
+
+#root {
+  overflow: hidden;
+}
