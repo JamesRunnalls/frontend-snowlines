@@ -8,18 +8,24 @@ class Home extends Component {
     document.title = "Snowlines";
     return (
       <React.Fragment>
-        <div className="pagecenter">
-          <img src={logo} className="loading-logo fade-in" alt="Snowlines logo" />
-          <div className="loading-text fade-in">
-            Snowlines is under construction.
+        <main>
+          <div className="pagecenter">
+            <img
+              src={logo}
+              className="loading-logo fade-in"
+              alt="Snowlines logo"
+            />
+            <div className="loading-text fade-in">
+              Snowlines is under construction.
+            </div>
+            <div className="progress">
+              <div className="progress-value"></div>
+            </div>
           </div>
-          <div className="progress">
-            <div className="progress-value"></div>
+          <div className="main">
+            <Basemap />
           </div>
-        </div>
-        <div className="main">
-          <Basemap />
-        </div>
+        </main>
       </React.Fragment>
     );
   }
