@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW X6 -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="1708" height="1847" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 1708 1847"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .fil0 {fill:#373435;fill-rule:nonzero}
+    .fil1 {fill:#009FDE;fill-rule:nonzero}
+   ]]>
+  </style>
+ </defs>
+ <g id="Layer_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <polygon class="fil0" points="686,1355 686,1045 433,1045 433,925 393,925 393,1088 646,1088 646,1355 "/>
+  <polygon class="fil0" points="796,1355 796,1311 953,1311 953,1045 1253,1045 1253,1088 993,1088 993,1355 "/>
+  <polygon class="fil0" points="393,751 393,795 686,795 686,528 863,528 863,485 646,485 646,751 "/>
+  <polygon class="fil0" points="953,485 953,795 1213,795 1213,925 1253,925 1253,751 993,751 993,485 "/>
+  <polygon class="fil1" points="784,485 784,435 537,189 597,136 784,317 784,-3 863,-3 863,317 1047,137 1104,192 863,435 863,485 "/>
+  <polygon class="fil1" points="875,1355 875,1405 1123,1650 1062,1704 875,1522 875,1842 796,1842 796,1522 612,1702 555,1647 796,1405 796,1355 "/>
+  <polygon class="fil1" points="638,1088 422,1215 325,1550 249,1522 319,1272 38,1425 0,1356 281,1202 35,1127 56,1050 384,1146 486,1088 "/>
+  <polygon class="fil1" points="1001,1088 1217,1215 1314,1550 1390,1522 1321,1272 1602,1425 1639,1356 1358,1202 1605,1127 1583,1050 1255,1146 1153,1088 "/>
+  <polygon class="fil1" points="482,751 419,716 82,805 66,726 317,656 41,494 81,426 357,588 295,338 372,317 459,648 637,751 "/>
+  <polygon class="fil1" points="1158,751 1221,716 1558,805 1574,726 1323,656 1599,494 1559,426 1283,588 1345,338 1268,317 1182,648 1003,751 "/>
+  <path class="fil0" d="M1235 1782c2,8 6,22 26,29 11,4 20,4 28,4 37,0 44,-19 44,-29 0,-21 -17,-26 -27,-29l-49 -13c-32,-8 -48,-31 -48,-59 0,-42 34,-66 78,-66 22,0 43,6 61,19 13,11 17,21 19,29l-38 10c-3,-8 -9,-25 -41,-25 -30,0 -38,16 -38,27 0,17 20,24 31,27l37 9c19,5 57,16 57,63 0,44 -37,69 -88,69 -26,0 -50,-6 -68,-21 -15,-12 -19,-26 -22,-36l38 -8z"/>
+  <polygon class="fil0" points="1408,1844 1408,1623 1451,1623 1451,1808 1544,1808 1544,1844 "/>
+  <polygon class="fil0" points="1573,1844 1573,1623 1713,1623 1713,1657 1614,1657 1614,1718 1692,1718 1692,1751 1614,1751 1614,1844 "/>
+ </g>
+</svg>

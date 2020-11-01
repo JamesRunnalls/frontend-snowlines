@@ -1,19 +1,119 @@
-main {
-  width: 960px;
-  max-width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 10px;
-  min-height: calc(100vh - 235px);
+#root {
+  overflow: hidden;
 }
 
-@media screen and (max-width: 500px) {
-  main {
-    margin-bottom: 70px;
-    min-height: calc(100vh - 120px);
+/* Home - Basemap */
+
+.home .basemap {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
+/* Home - Select Basemap */
+
+.home .selectbasemap {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9;
+}
+
+.home .selectbasemap .minimap {
+  height: 80px;
+  width: 80px;
+  cursor: pointer;
+}
+
+.home .selectbasemap .minimap .leaflet-container {
+  border-radius: 20px;
+  border: 2px solid black;
+  box-shadow: 0px 0px 5px #fff;
+}
+
+.home .selectbasemap .minimap {
+  display: inline-block;
+  padding-left: 20px;
+}
+
+.home .selectbasemap .minimap.hide {
+  visibility: hidden;
+}
+
+.home .selectbasemap:hover .minimap.hide {
+  visibility: visible;
+}
+
+.home .selectbasemap .minimap .leaflet-control-attribution {
+  display: none;
+}
+
+/* Home - Header */
+
+.home .header {
+  position: fixed;
+  left: 30px;
+  top: 30px;
+  z-index: 9;
+}
+
+.home .header .loading-logo {
+  width: 300px;
+  max-width: 70%;
+}
+
+/* CSS Functions */
+
+.fade-in {
+  animation: fadeIn ease 2s;
+  -webkit-animation: fadeIn ease 2s;
+  -moz-animation: fadeIn ease 2s;
+  -o-animation: fadeIn ease 2s;
+  -ms-animation: fadeIn ease 2s;
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }
 
-#root {
-  overflow: hidden;
+@-moz-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-o-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-ms-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

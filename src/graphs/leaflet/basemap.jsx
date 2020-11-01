@@ -21,7 +21,7 @@ class Basemap extends Component {
   };
 
   componentDidMount() {
-    var center = [46.501,7.992];
+    var center = [46.501, 7.992];
     if ("center" in this.props) {
       center = this.props.center;
     }
@@ -30,49 +30,22 @@ class Basemap extends Component {
       zoom = this.props.zoom;
     }
 
-    var snowlinesmap = L.tileLayer(
+    this.layer = L.tileLayer(
       "https://api.mapbox.com/styles/v1/jamesrunnalls/ckgv0jzjb3mo219n8bgwzu88j/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiamFtZXNydW5uYWxscyIsImEiOiJjazk0ZG9zd2kwM3M5M2hvYmk3YW0wdW9yIn0.uIJUZoDgaC2LfdGtgMz0cQ",
       {
         attribution:
           '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | &copy; <a href="https://www.mapbox.com/">mapbox</a>',
       }
     );
-    var swisstopo = L.tileLayer(
-      "https://wmts20.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-grau/default/current/3857/{z}/{x}/{y}.jpeg",
-      {
-        attribution:
-          '<a title="Swiss Federal Office of Topography" href="https://www.swisstopo.admin.ch/">swisstopo</a>',
-      }
-    );
-    var satellite = L.tileLayer(
-      "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-      {
-        attribution:
-          "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
-      }
-    );
-
-    var dark = L.tileLayer(
-      "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png",
-      {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      }
-    );
 
     var topolink =
       "https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.pngraw?access_token=pk.eyJ1IjoiamFtZXNydW5uYWxscyIsImEiOiJjazk0ZG9zd2kwM3M5M2hvYmk3YW0wdW9yIn0.uIJUZoDgaC2LfdGtgMz0cQ";
 
-    this.baseMaps = {
-      snowlinesmap,
-      swisstopo,
-      satellite,
-      dark,
-    };
-
-    this.layer = snowlinesmap;
     if ("basemap" in this.props) {
-      this.layer = this.baseMaps[this.props.basemap];
+      var { basemap, basemaps } = this.props;
+      this.layer = L.tileLayer(basemaps[basemap].url, {
+        attribution: basemaps[basemap].attribution,
+      });
     }
 
     var zoomControl = false;
@@ -119,6 +92,35 @@ class Basemap extends Component {
         passLocation({ lat, lng, alt });
       }
     });
+
+    if ("onChangeLocation" in this.props) {
+      var { onChangeLocation } = this.props;
+      this.map.on("zoom", function (e) {
+        let zoom = e.target._zoom;
+        let latlng = e.target._lastCenter;
+        let lat = Math.round(latlng.lat * 1000) / 1000;
+        let lng = Math.round(latlng.lng * 1000) / 1000;
+        onChangeLocation([lat, lng], zoom);
+      });
+      this.map.on("drag", function (e) {
+        let zoom = e.target._zoom;
+        let latlng = map.getCenter();
+        let lat = Math.round(latlng.lat * 1000) / 1000;
+        let lng = Math.round(latlng.lng * 1000) / 1000;
+        onChangeLocation([lat, lng], zoom);
+      });
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    var { basemap, basemaps } = this.props;
+    if (prevProps.basemap !== basemap) {
+      this.map.removeLayer(this.layer);
+      this.layer = L.tileLayer(basemaps[basemap].url, {
+        attribution: basemaps[basemap].attribution,
+      });
+      this.map.addLayer(this.layer);
+    }
   }
 
   render() {
