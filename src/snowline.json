@@ -1,0 +1,17 @@
+{
+    "updated": 1605288083,
+    "version": 0.1,
+    "bucket": "https://snowlines.s3.eu-central-1.amazonaws.com",
+    "data": [
+        {
+            "id": 0,
+            "datetime": 1605190920,
+            "url": "snowline_20201112_1422.json"
+        },
+        {
+            "id": 1,
+            "datetime": 1605284520,
+            "url": "snowline_20201113_1622.json"
+        }
+    ]
+}

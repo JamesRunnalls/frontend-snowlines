@@ -1,7 +1,9 @@
 import React, { Component } from "react";
+import axios from "axios";
 import Header from "../../components/header/header";
 import SelectBasemap from "../../components/selectbasemap/selectbasemap";
 import Basemap from "../../graphs/leaflet/basemap";
+import { basemaps } from "../../config.json";
 import "../../App.css";
 
 class SelectSource extends Component {
@@ -12,9 +14,17 @@ class SelectSource extends Component {
 }
 
 class TimeSelector extends Component {
-  state = {};
   render() {
-    return <div></div>;
+    var { datetime, onChangeDatetime } = this.props;
+    return (
+      <div>
+        <input
+          type="date"
+          value={datetime.toISOString().split("T")[0]}
+          onChange={onChangeDatetime}
+        />
+      </div>
+    );
   }
 }
 
@@ -30,32 +40,17 @@ class Home extends Component {
     basemap: "snowlinesmap",
     zoom: 10,
     center: [46.501, 7.992],
-    basemaps: {
-      snowlinesmap: {
-        url:
-          "https://api.mapbox.com/styles/v1/jamesrunnalls/ckgv0jzjb3mo219n8bgwzu88j/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiamFtZXNydW5uYWxscyIsImEiOiJjazk0ZG9zd2kwM3M5M2hvYmk3YW0wdW9yIn0.uIJUZoDgaC2LfdGtgMz0cQ",
-        attribution:
-          '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | &copy; <a href="https://www.mapbox.com/">mapbox</a>',
-      },
-      dark: {
-        url:
-          "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png",
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      },
-      satellite: {
-        url:
-          "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-        attribution:
-          "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
-      },
-      swisstopo: {
-        url:
-          "https://wmts20.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-grau/default/current/3857/{z}/{x}/{y}.jpeg",
-        attribution:
-          '<a title="Swiss Federal Office of Topography" href="https://www.swisstopo.admin.ch/">swisstopo</a>',
-      },
-    },
+    datetime: new Date(),
+    basemaps: basemaps,
+    geojson: [],
+    geojsonid: 0,
+    snowlines: {},
+  };
+
+  onChangeDatetime = (event) => {
+    var { datetime } = this.state;
+    var new_datetime = new Date(event.target.value);
+    this.updateSnowline(datetime, new_datetime);
   };
 
   onChangeBasemap = (basemap) => {
@@ -66,9 +61,71 @@ class Home extends Component {
     this.setState({ center, zoom });
   };
 
+  getSnowlineFiles = async () => {
+    var { data } = await axios.get(
+      "https://snowlines-database.s3.eu-central-1.amazonaws.com/snowline.json"
+    );
+    return data;
+  };
+
+  getSnowline = async (snowlines, datetime) => {
+    let unix = datetime.getTime() / 1000;
+    let { bucket, data } = snowlines;
+    let index = data.reduce((r, a, i, aa) => {
+      return i && Math.abs(aa[r].datetime - unix) < Math.abs(a.datetime - unix)
+        ? r
+        : i;
+    }, -1);
+    var snowline_data;
+    if (!("data" in data[index])) {
+      ({ data: snowline_data } = await axios.get(
+        bucket + "/" + data[index].url
+      ));
+      snowlines.data[index]["data"] = snowline_data;
+    } else {
+      snowline_data = data[index]["data"];
+    }
+    var style = {
+      color: "#ffffff",
+      weight: 1,
+      opacity: 0.7,
+    };
+    var details = {
+      datetime: new Date(data[index].datetime * 1000),
+    };
+    return { data: snowline_data, style, details };
+  };
+
+  updateSnowline = async (prevDatetime, datetime) => {
+    if (prevDatetime !== datetime) {
+      var { snowlines, geojson, geojsonid } = this.state;
+      var snowline = await this.getSnowline(snowlines, datetime);
+      geojson = [snowline];
+      geojsonid++;
+      this.setState({ geojson, geojsonid, snowlines, datetime });
+    }
+  };
+
+  async componentDidMount() {
+    var { geojson, geojsonid, datetime } = this.state;
+    var snowlines = await this.getSnowlineFiles();
+    var snowline = await this.getSnowline(snowlines, datetime);
+    geojson = [snowline];
+    geojsonid++;
+    this.setState({ geojson, geojsonid, snowlines });
+  }
+
   render() {
     document.title = "Snowlines";
-    var { basemap, basemaps, zoom, center } = this.state;
+    var {
+      datetime,
+      basemap,
+      basemaps,
+      zoom,
+      center,
+      geojson,
+      geojsonid,
+    } = this.state;
     return (
       <div className="home">
         <div className="header">
@@ -83,16 +140,25 @@ class Home extends Component {
             onChangeBasemap={this.onChangeBasemap}
           />
         </div>
-        <SelectSource />
-        <TimeSelector />
+
+        <div className="selectsource">
+          <SelectSource />
+        </div>
+        <div className="timeselector">
+          <TimeSelector
+            datetime={datetime}
+            onChangeDatetime={this.onChangeDatetime}
+          />
+        </div>
         <Menu />
         <div className="basemap">
           <Basemap
             basemap={basemap}
-            basemaps={basemaps}
             zoom={zoom}
             center={center}
             onChangeLocation={this.onChangeLocation}
+            geojson={geojson}
+            geojsonid={geojsonid}
           />
         </div>
       </div>

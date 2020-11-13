@@ -64,6 +64,15 @@
   max-width: 70%;
 }
 
+/* Home - Time Selector */
+
+.home .timeselector {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  z-index: 9;
+}
+
 /* CSS Functions */
 
 .fade-in {

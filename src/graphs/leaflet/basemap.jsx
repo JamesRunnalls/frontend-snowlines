@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { basemaps, topolink } from "../../config.json";
 import L from "leaflet";
 import "./leaflet_colorpicker";
 import "./css/leaflet.css";
@@ -20,6 +21,33 @@ class Basemap extends Component {
     this.props.hoverFunc(e.target, "out");
   };
 
+  updateBasemap = (prevBasemap, basemap) => {
+    if (prevBasemap !== basemap) {
+      this.map.removeLayer(this.basemap);
+      this.basemap = L.tileLayer(basemaps[basemap].url, {
+        attribution: basemaps[basemap].attribution,
+      }).addTo(this.map);
+    }
+  };
+
+  updateGeoJSON = (previd, id, geojson) => {
+    if (previd !== id) {
+      this.geojson.forEach((g) => {
+        this.map.removeLayer(g);
+      });
+      this.geojson = [];
+      geojson.forEach((g) => {
+        this.geojson.push(
+          L.geoJSON(g.data, {
+            style: g.style,
+          })
+            .bindPopup("<div>" + g.details.datetime + "</div>")
+            .addTo(this.map)
+        );
+      });
+    }
+  };
+
   componentDidMount() {
     var center = [46.501, 7.992];
     if ("center" in this.props) {
@@ -30,23 +58,18 @@ class Basemap extends Component {
       zoom = this.props.zoom;
     }
 
-    this.layer = L.tileLayer(
-      "https://api.mapbox.com/styles/v1/jamesrunnalls/ckgv0jzjb3mo219n8bgwzu88j/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiamFtZXNydW5uYWxscyIsImEiOiJjazk0ZG9zd2kwM3M5M2hvYmk3YW0wdW9yIn0.uIJUZoDgaC2LfdGtgMz0cQ",
-      {
-        attribution:
-          '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | &copy; <a href="https://www.mapbox.com/">mapbox</a>',
-      }
-    );
-
-    var topolink =
-      "https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.pngraw?access_token=pk.eyJ1IjoiamFtZXNydW5uYWxscyIsImEiOiJjazk0ZG9zd2kwM3M5M2hvYmk3YW0wdW9yIn0.uIJUZoDgaC2LfdGtgMz0cQ";
+    this.basemap = L.tileLayer(basemaps.snowlinesmap.url, {
+      attribution: basemaps.snowlinesmap.attribution,
+    });
 
     if ("basemap" in this.props) {
-      var { basemap, basemaps } = this.props;
-      this.layer = L.tileLayer(basemaps[basemap].url, {
+      var { basemap } = this.props;
+      this.basemap = L.tileLayer(basemaps[basemap].url, {
         attribution: basemaps[basemap].attribution,
       });
     }
+
+    this.geojson = [];
 
     var zoomControl = false;
     var { setZoomIn, setZoomOut } = this.props;
@@ -71,7 +94,7 @@ class Basemap extends Component {
       })
       .addTo(this.map);
 
-    this.layer.addTo(this.map);
+    this.basemap.addTo(this.map);
     var map = this.map;
     var passLocation = this.props.passLocation;
     this.map.on("mousemove", function (e) {
@@ -113,14 +136,9 @@ class Basemap extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    var { basemap, basemaps } = this.props;
-    if (prevProps.basemap !== basemap) {
-      this.map.removeLayer(this.layer);
-      this.layer = L.tileLayer(basemaps[basemap].url, {
-        attribution: basemaps[basemap].attribution,
-      });
-      this.map.addLayer(this.layer);
-    }
+    var { basemap, geojson, geojsonid } = this.props;
+    this.updateBasemap(prevProps.basemap, basemap);
+    this.updateGeoJSON(prevProps.geojsonid, geojsonid, geojson);
   }
 
   render() {
