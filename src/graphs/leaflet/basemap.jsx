@@ -36,15 +36,19 @@ class Basemap extends Component {
         this.map.removeLayer(g);
       });
       this.geojson = [];
-      geojson.forEach((g) => {
-        this.geojson.push(
-          L.geoJSON(g.data, {
-            style: g.style,
-          })
-            .bindPopup("<div>" + g.details.datetime + "</div>")
-            .addTo(this.map)
-        );
-      });
+      try {
+        geojson.forEach((g) => {
+          this.geojson.push(
+            L.geoJSON(g.data, {
+              style: g.style,
+            })
+              .bindPopup("<div>" + g.details.datetime + "</div>")
+              .addTo(this.map)
+          );
+        });
+      } catch (e) {
+        alert("Leo your geojson still sucks");
+      }
     }
   };
 
