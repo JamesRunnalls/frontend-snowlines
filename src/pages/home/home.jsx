@@ -45,6 +45,7 @@ class Home extends Component {
     geojson: [],
     geojsonid: 0,
     snowlines: {},
+    snowline_color: "white"
   };
 
   onChangeDatetime = (event) => {
@@ -54,7 +55,8 @@ class Home extends Component {
   };
 
   onChangeBasemap = (basemap) => {
-    this.setState({ basemap });
+    let snowline_color = basemaps[basemap].color 
+    this.setState({ basemap, snowline_color });
   };
 
   onChangeLocation = (center, zoom) => {
@@ -69,6 +71,7 @@ class Home extends Component {
   };
 
   getSnowline = async (snowlines, datetime) => {
+    var { snowline_color } = this.state
     let unix = datetime.getTime() / 1000;
     let { bucket, data } = snowlines;
     let index = data.reduce((r, a, i, aa) => {
@@ -86,7 +89,7 @@ class Home extends Component {
       snowline_data = data[index]["data"];
     }
     var style = {
-      color: "#ffffff",
+      color: snowline_color,
       weight: 1,
       opacity: 0.7,
     };
