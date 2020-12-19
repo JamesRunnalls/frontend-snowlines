@@ -8,7 +8,6 @@ class Header extends Component {
     return (
       <React.Fragment>
         <img src={logo} className="loading-logo fade-in" alt="Snowlines logo" />
-        <div>Version 0.1</div>
       </React.Fragment>
     );
   }
