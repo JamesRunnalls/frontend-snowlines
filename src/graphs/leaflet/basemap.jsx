@@ -47,7 +47,7 @@ class Basemap extends Component {
           );
         });
       } catch (e) {
-        alert("Leo your geojson still sucks");
+        alert("This geojson sucks");
       }
     }
   };
