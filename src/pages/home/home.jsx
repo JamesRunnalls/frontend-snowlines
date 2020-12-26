@@ -6,26 +6,12 @@ import SelectBasemap from "../../components/selectbasemap/selectbasemap";
 import Basemap from "../../graphs/leaflet/basemap";
 import { basemaps } from "../../config.json";
 import "../../App.css";
+import TimeSelector from "../../components/timeselector/timeselector";
 
 class SelectSource extends Component {
   state = {};
   render() {
     return <div></div>;
-  }
-}
-
-class TimeSelector extends Component {
-  render() {
-    var { datetime, onChangeDatetime } = this.props;
-    return (
-      <div>
-        <input
-          type="date"
-          value={datetime.toISOString().split("T")[0]}
-          onChange={onChangeDatetime}
-        />
-      </div>
-    );
   }
 }
 
@@ -47,6 +33,9 @@ class Home extends Component {
     geojsonid: 0,
     snowlines: {},
     snowline_color: "white",
+    maxdate: new Date(),
+    mindate: new Date(Date.now() - 12096e5),
+    datearray: [],
   };
 
   onChangeDatetime = (event) => {
@@ -114,15 +103,23 @@ class Home extends Component {
     var { geojson, geojsonid, datetime } = this.state;
     var snowlines = await this.getSnowlineFiles();
     var snowline = await this.getSnowline(snowlines, datetime);
+    var datearray = snowlines.data.map((s) => {
+      var ds = 24 * 3600;
+      return Math.floor(s.datetime / ds) * ds * 1000;
+    });
+    console.log(datearray)
     geojson = [snowline];
     geojsonid++;
-    this.setState({ geojson, geojsonid, snowlines });
+    this.setState({ geojson, geojsonid, snowlines, datearray });
   }
 
   render() {
     document.title = "Snowlines";
     var {
       datetime,
+      mindate,
+      maxdate,
+      datearray,
       basemap,
       basemaps,
       zoom,
@@ -154,6 +151,10 @@ class Home extends Component {
         <div className="timeselector">
           <TimeSelector
             datetime={datetime}
+            datearray={datearray}
+            mindate={mindate}
+            maxdate={maxdate}
+            daysize={30}
             onChangeDatetime={this.onChangeDatetime}
           />
         </div>
