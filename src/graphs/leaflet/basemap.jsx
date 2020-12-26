@@ -88,9 +88,16 @@ class Basemap extends Component {
       zoomControl,
       center: center,
       zoom: zoom,
-      minZoom: 7,
+      minZoom: 9,
       maxZoom: 15,
+      maxBoundsViscosity: 0.5,
     });
+    var map = this.map;
+
+    var southWest = L.latLng(45.7, 5.7);
+    var northEast = L.latLng(48.1, 10.65);
+    var bounds = L.latLngBounds(southWest, northEast);
+    this.map.setMaxBounds(bounds);
 
     var colorpicker = L.tileLayer
       .colorPicker(topolink, {
@@ -99,7 +106,6 @@ class Basemap extends Component {
       .addTo(this.map);
 
     this.basemap.addTo(this.map);
-    var map = this.map;
     var passLocation = this.props.passLocation;
     this.map.on("mousemove", function (e) {
       var lat = Math.round(1000 * e.latlng.lat) / 1000;
