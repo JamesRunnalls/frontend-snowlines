@@ -64,6 +64,30 @@
   max-width: 70%;
 }
 
+/* Home - About */
+
+.home .about {
+  z-index: 9;
+  position: fixed;
+  right: 0px;
+  top: 30px;
+  cursor: pointer;
+}
+
+.home .about .about-title {
+  background-color: black;
+  color: white;
+  padding: 5px 15px;
+}
+
+.home .about .about-body {
+  width: 300px;
+  position: absolute;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 15px 15px;
+}
+
 /* Home - Time Selector */
 
 .home .timeselector {

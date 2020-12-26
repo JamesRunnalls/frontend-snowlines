@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Header from "../../components/header/header";
+import About from "../../components/about/about";
 import SelectBasemap from "../../components/selectbasemap/selectbasemap";
 import Basemap from "../../graphs/leaflet/basemap";
 import { basemaps } from "../../config.json";
@@ -45,7 +46,7 @@ class Home extends Component {
     geojson: [],
     geojsonid: 0,
     snowlines: {},
-    snowline_color: "white"
+    snowline_color: "white",
   };
 
   onChangeDatetime = (event) => {
@@ -55,7 +56,7 @@ class Home extends Component {
   };
 
   onChangeBasemap = (basemap) => {
-    let snowline_color = basemaps[basemap].color 
+    let snowline_color = basemaps[basemap].color;
     this.setState({ basemap, snowline_color });
   };
 
@@ -71,7 +72,7 @@ class Home extends Component {
   };
 
   getSnowline = async (snowlines, datetime) => {
-    var { snowline_color } = this.state
+    var { snowline_color } = this.state;
     let unix = datetime.getTime() / 1000;
     let { bucket, data } = snowlines;
     let index = data.reduce((r, a, i, aa) => {
@@ -129,10 +130,17 @@ class Home extends Component {
       geojson,
       geojsonid,
     } = this.state;
+    var body = "The snowline for Switzerland is produced using regularly updated satellite images. Snowlines has been produced by Leo Kahle and James Runnalls."
     return (
       <div className="home">
         <div className="header">
           <Header />
+        </div>
+        <div className="about">
+          <About
+            title="About Snowlines"
+            body={body}
+          />
         </div>
         <div className="selectbasemap">
           <SelectBasemap
