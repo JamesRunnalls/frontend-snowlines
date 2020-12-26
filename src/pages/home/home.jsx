@@ -130,17 +130,13 @@ class Home extends Component {
       geojson,
       geojsonid,
     } = this.state;
-    var body = "The snowline for Switzerland is produced using regularly updated satellite images. Snowlines has been produced by Leo Kahle and James Runnalls."
     return (
       <div className="home">
         <div className="header">
           <Header />
         </div>
         <div className="about">
-          <About
-            title="About Snowlines"
-            body={body}
-          />
+          <About />
         </div>
         <div className="selectbasemap">
           <SelectBasemap

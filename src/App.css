@@ -1,5 +1,6 @@
 #root {
   overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 /* Home - Basemap */
@@ -81,11 +82,20 @@
 }
 
 .home .about .about-body {
-  width: 300px;
+  width: calc(100vw - 40px);
   position: absolute;
   right: 0;
   background-color: rgba(255, 255, 255, 0.7);
-  padding: 15px 15px;
+  padding: 15px 35px;
+  top: 40px;
+  box-sizing: border-box;
+  max-height: calc(100vh - 210px);
+  overflow: auto;
+}
+
+.home .about .about-body .about-image {
+  max-width: 100%;
+  max-width: 600px;
 }
 
 /* Home - Time Selector */
