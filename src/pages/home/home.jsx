@@ -38,9 +38,8 @@ class Home extends Component {
     datearray: [],
   };
 
-  onChangeDatetime = (event) => {
+  onChangeDatetime = (new_datetime) => {
     var { datetime } = this.state;
-    var new_datetime = new Date(event.target.value);
     this.updateSnowline(datetime, new_datetime);
   };
 
@@ -107,9 +106,10 @@ class Home extends Component {
       var ds = 24 * 3600;
       return Math.floor(s.datetime / ds) * ds * 1000;
     });
+    datetime = new Date(Math.max(...datearray));
     geojson = [snowline];
     geojsonid++;
-    this.setState({ geojson, geojsonid, snowlines, datearray });
+    this.setState({ geojson, geojsonid, snowlines, datearray, datetime });
   }
 
   render() {

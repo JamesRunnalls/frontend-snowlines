@@ -120,6 +120,14 @@
   z-index: -1;
 }
 
+.home .timeselector .datevalue {
+  color: white;
+  position: absolute;
+  top: -35px;
+  font-size: 26px;
+  left: 30px;
+}
+
 .home .timeselector .xaxis {
   font-size: 15px;
   color: white;

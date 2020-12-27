@@ -12,7 +12,7 @@ class TimeSelector extends Component {
       var margin = { top: 0, right: 10, bottom: 20, left: 0 },
         viswidth = d3.select("#timeselector").node().getBoundingClientRect()
           .width,
-        visheight = 60,
+        visheight = 65,
         width = viswidth - margin.left - margin.right,
         height = visheight - margin.top - margin.bottom;
 
@@ -72,6 +72,22 @@ class TimeSelector extends Component {
         .on("mouseout", mouseout)
         .on("click", onClick);
 
+      var ds = 24 * 3600 * 1000;
+      var hover_datetime = new Date(Math.floor(datetime.getTime() / ds) * ds);
+      var hover = svg
+        .append("g")
+        .attr("class", "hover")
+        .attr("id", "hover")
+        .append("rect")
+        .attr("height", 36)
+        .attr("width", daysize / 2 + 7)
+        .attr("fill", "transparent")
+        .attr("stroke", "white")
+        .attr("rx", 4)
+        .attr("ry", 4)
+        .attr("x", x(hover_datetime) + 4)
+        .attr("y", 2);
+
       var squares = svg
         .append("g")
         .attr("class", "squares")
@@ -106,13 +122,15 @@ class TimeSelector extends Component {
             .attr("rx", 4)
             .attr("ry", 4)
             .attr("x", x(new Date(min + (i + 0.25) * ds)))
-            .attr("y", 0)
-            .on({
-              mouseover: function () {},
-              mouseout: function () {},
-              click: function () {
-                onChangeDatetime(new Date(min + (i + 0.25) * ds));
-              },
+            .attr("y", 5)
+            .on("mouseover", function () {
+              d3.select("#datevalue").innerHTML = new Date(
+                min + i * ds
+              ).toDateString();
+              hover.attr("x", x(new Date(min + i * ds)) + 4);
+            })
+            .on("click", function () {
+              onChangeDatetime(new Date(min + (i + 0.5) * ds));
             });
         }
       }
@@ -139,9 +157,13 @@ class TimeSelector extends Component {
     this.plotLineGraph();
   }
   render() {
+    var { datetime } = this.props;
     return (
       <div id="timeselector">
         <div className="gradient" />
+        <div id="datevalue" className="datevalue">
+          {datetime.toDateString()}
+        </div>
       </div>
     );
   }
