@@ -17,7 +17,7 @@
 
 .home .selectbasemap {
   position: fixed;
-  bottom: 20px;
+  bottom: 100px;
   right: 20px;
   z-index: 9;
 }
@@ -103,10 +103,10 @@
 .home .timeselector {
   position: fixed;
   bottom: 20px;
-  left: 30px;
   z-index: 1;
-  width: calc(100vw - 200px);
-  height: 80px;
+  width: 100vw;
+  height: 60px;
+  cursor: pointer;
 }
 
 .home .timeselector .gradient {
@@ -128,6 +128,12 @@
 
 .home .timeselector .xaxis .domain {
   stroke-width: 0;
+}
+
+/* Basemap Leaflet */
+
+.leaflet-zoom-animated {
+  cursor: move;
 }
 
 /* CSS Functions */

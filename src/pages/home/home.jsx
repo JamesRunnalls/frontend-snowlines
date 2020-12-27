@@ -107,7 +107,6 @@ class Home extends Component {
       var ds = 24 * 3600;
       return Math.floor(s.datetime / ds) * ds * 1000;
     });
-    console.log(datearray)
     geojson = [snowline];
     geojsonid++;
     this.setState({ geojson, geojsonid, snowlines, datearray });

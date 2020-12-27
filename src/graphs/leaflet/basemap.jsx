@@ -41,13 +41,11 @@ class Basemap extends Component {
           this.geojson.push(
             L.geoJSON(g.data, {
               style: g.style,
-            })
-              .bindPopup("<div>" + g.details.datetime + "</div>")
-              .addTo(this.map)
+            }).addTo(this.map)
           );
         });
       } catch (e) {
-        alert("Leo your geojson still sucks");
+        alert("GeoJSON not plotted.");
       }
     }
   };

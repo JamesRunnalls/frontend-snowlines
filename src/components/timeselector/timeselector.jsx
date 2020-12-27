@@ -39,6 +39,7 @@ class TimeSelector extends Component {
       function zoomed() {
         x.domain(d3.event.transform.rescaleX(xx).domain());
         gX.call(xAxis);
+        plotSquares();
       }
 
       // Adds the svg canvas
@@ -95,16 +96,24 @@ class TimeSelector extends Component {
             .append("rect")
             .attr("height", 30)
             .attr("width", daysize / 2)
-            .attr("stroke", "white")
             .attr("fill", function () {
               if (datearray.includes(min + i * ds)) {
-                return "white";
+                return "rgba(255,255,255,0.9)";
               } else {
-                return "transparent";
+                return "rgba(255,255,255,0.2)";
               }
             })
+            .attr("rx", 4)
+            .attr("ry", 4)
             .attr("x", x(new Date(min + (i + 0.25) * ds)))
-            .attr("y", 0);
+            .attr("y", 0)
+            .on({
+              mouseover: function () {},
+              mouseout: function () {},
+              click: function () {
+                onChangeDatetime(new Date(min + (i + 0.25) * ds));
+              },
+            });
         }
       }
 
