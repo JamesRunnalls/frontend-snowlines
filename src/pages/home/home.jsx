@@ -7,6 +7,7 @@ import Basemap from "../../graphs/leaflet/basemap";
 import { basemaps } from "../../config.json";
 import "../../App.css";
 import TimeSelector from "../../components/timeselector/timeselector";
+import Loading from "../../components/loading/loading";
 
 class SelectSource extends Component {
   state = {};
@@ -39,8 +40,11 @@ class Home extends Component {
   };
 
   onChangeDatetime = (new_datetime) => {
+    document.getElementById("home-loading").style.display = "block";
     var { datetime } = this.state;
-    this.updateSnowline(datetime, new_datetime);
+    this.updateSnowline(datetime, new_datetime).then(() => {
+      document.getElementById("home-loading").style.display = "none";
+    });
   };
 
   onChangeBasemap = (basemap) => {
@@ -133,6 +137,9 @@ class Home extends Component {
         </div>
         <div className="about">
           <About />
+        </div>
+        <div className="loading" id="home-loading">
+          <Loading />
         </div>
         <div className="selectbasemap">
           <SelectBasemap

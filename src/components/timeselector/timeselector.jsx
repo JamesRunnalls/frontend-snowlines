@@ -2,13 +2,22 @@ import React, { Component } from "react";
 import * as d3 from "d3";
 
 class TimeSelector extends Component {
-  plotLineGraph = async () => {
+  state = {
+    min: false,
+    max: false,
+  };
+  onChangeState = (min, max) => {
+    this.setState({ min, max });
+  };
+  plotLineGraph = async (resize) => {
     try {
       d3.select("#timeselectorsvg").remove();
     } catch (e) {}
     var { datearray, datetime, onChangeDatetime, daysize } = this.props;
     try {
       // Set graph size
+      var { min, max } = this.state;
+      var onChangeState = this.onChangeState;
       var margin = { top: 0, right: 10, bottom: 20, left: 0 },
         viswidth = d3.select("#timeselector").node().getBoundingClientRect()
           .width,
@@ -16,13 +25,18 @@ class TimeSelector extends Component {
         width = viswidth - margin.left - margin.right,
         height = visheight - margin.top - margin.bottom;
 
-      var nodays = width / daysize;
-      var maxdate = new Date(datetime.getTime() + nodays * 24 * 1200 * 1000);
-      var mindate = new Date(datetime.getTime() - nodays * 24 * 2400 * 1000);
-
       // Format X-axis
-      var x = d3.scaleTime().range([0, width]).domain([mindate, maxdate]);
-      var xx = d3.scaleTime().range([0, width]).domain([mindate, maxdate]);
+      var x, xx;
+      if (min && max && !resize) {
+        x = d3.scaleTime().range([0, width]).domain([min, max]);
+        xx = d3.scaleTime().range([0, width]).domain([min, max]);
+      } else {
+        var nodays = width / daysize;
+        var maxdate = new Date(datetime.getTime() + nodays * 24 * 1200 * 1000);
+        var mindate = new Date(datetime.getTime() - nodays * 24 * 2400 * 1000);
+        x = d3.scaleTime().range([0, width]).domain([mindate, maxdate]);
+        xx = d3.scaleTime().range([0, width]).domain([mindate, maxdate]);
+      }
 
       // Define the axes
       var xAxis = d3.axisBottom(x).ticks(5);
@@ -40,6 +54,7 @@ class TimeSelector extends Component {
         x.domain(d3.event.transform.rescaleX(xx).domain());
         gX.call(xAxis);
         plotSquares();
+        hover.attr("x", x(hover_datetime) + 4);
       }
 
       // Adds the svg canvas
@@ -103,54 +118,63 @@ class TimeSelector extends Component {
 
       function plotSquares() {
         d3.select("#squares").selectAll("*").remove();
-        var ds = 24 * 3600 * 1000;
         var min = Math.ceil(x.domain()[0].getTime() / ds) * ds;
         var max = Math.floor(x.domain()[1].getTime() / ds) * ds;
 
         for (let i = 0; i < Math.round((max - min) / ds); i++) {
-          squares
+          let rect = squares
             .append("rect")
             .attr("height", 30)
             .attr("width", daysize / 2)
-            .attr("fill", function () {
-              if (datearray.includes(min + i * ds)) {
-                return "rgba(255,255,255,0.9)";
-              } else {
-                return "rgba(255,255,255,0.2)";
-              }
-            })
+            .attr("fill", "rgba(255,255,255,0.2)")
             .attr("rx", 4)
             .attr("ry", 4)
             .attr("x", x(new Date(min + (i + 0.25) * ds)))
             .attr("y", 5)
             .on("mouseover", function () {
-              d3.select("#datevalue").innerHTML = new Date(
+              d3.select("#datevalue").node().innerHTML = new Date(
                 min + i * ds
               ).toDateString();
               hover.attr("x", x(new Date(min + i * ds)) + 4);
-            })
-            .on("click", function () {
+            });
+
+          if (datearray.includes(min + i * ds)) {
+            rect.attr("fill", "rgba(255,255,255,0.9)").on("click", function () {
+              onChangeState(x.domain()[0], x.domain()[1]);
               onChangeDatetime(new Date(min + (i + 0.5) * ds));
             });
+          } else {
+            rect.on("click", function () {
+              let d = new Date(min + (i + 0.5) * ds).toDateString();
+              alert("No Snowline for " + d);
+            });
+          }
         }
       }
 
       function mouseover() {}
 
-      function mouseout() {}
+      function mouseout() {
+        d3.select("#datevalue").node().innerHTML = datetime.toDateString();
+        hover.attr("x", x(hover_datetime) + 4);
+      }
 
       function mousemove(event) {}
     } catch (e) {
       console.error("Error plotting time selector", e);
     }
   };
+
+  resize = () => {
+    this.plotLineGraph(true);
+  };
   componentDidMount() {
     this.plotLineGraph();
-    window.addEventListener("resize", this.plotLineGraph, false);
+    window.addEventListener("resize", this.resize, false);
   }
 
   componentWillUnmount() {
-    window.removeEventListener("resize", this.plotLineGraph, false);
+    window.removeEventListener("resize", this.resize, false);
   }
 
   componentDidUpdate(prevProps, prevState) {
