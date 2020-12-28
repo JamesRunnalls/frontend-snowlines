@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
+import Loading from "../loading/loading";
 
 class TimeSelector extends Component {
   state = {
@@ -187,6 +188,9 @@ class TimeSelector extends Component {
         <div className="gradient" />
         <div id="datevalue" className="datevalue">
           {datetime.toDateString()}
+        </div>
+        <div className="loading" id="time-loading">
+          <Loading />
         </div>
       </div>
     );

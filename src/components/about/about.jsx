@@ -22,8 +22,8 @@ class About extends Component {
             <div className="about-body">
               <h3>What is snowlines.ch?</h3>
               <p>
-                The page comes from a great idea idea we had in 2020. We wanted
-                to create a website that shows the snowlines within Switzerland
+                The page comes from a great idea we had in 2020. We wanted to
+                create a website that shows the snowlines within Switzerland
                 accurately and updated every day.
               </p>
               <h3>What is a snowline?</h3>
@@ -32,9 +32,13 @@ class About extends Component {
                 of no snow. Regions of snow are usually higher in altitude than
                 regions without snow. They also tend to be facing north and not
                 south. Regions of snow can also include land or water that is
-                covered in ice, like frozen lakes and glaciers. Screenshot
-                2020-12-26 at 12 49 20
+                covered in ice, like frozen lakes and glaciers.
               </p>
+              <img
+                className="about-image"
+                src={explain}
+                alt="Snowline explained"
+              />
               <h3>Why should I care where the snowlines are?</h3>
               <p>
                 If you stay at home, you don't need to care. However, we
@@ -48,7 +52,7 @@ class About extends Component {
                 line. You can check here if there is a risk of ending up in the
                 snow.
               </p>
-              <img className="about-image" src={explain} alt="Snowline explained"/>
+
               <h3>How is the snow line produced? </h3>
               <p>
                 The snowlines are produced from images that are shot by

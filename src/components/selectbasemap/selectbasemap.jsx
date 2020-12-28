@@ -13,6 +13,7 @@ class SelectBasemap extends Component {
         {Object.keys(trim_basemaps).map((b, index) => (
           <div
             key={b}
+            title={trim_basemaps[b].title}
             className={
               index !== Object.keys(trim_basemaps).length - 1
                 ? "minimap hide"

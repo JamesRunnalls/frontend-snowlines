@@ -3,11 +3,11 @@ import axios from "axios";
 import Header from "../../components/header/header";
 import About from "../../components/about/about";
 import SelectBasemap from "../../components/selectbasemap/selectbasemap";
+import TimeSelector from "../../components/timeselector/timeselector";
 import Basemap from "../../graphs/leaflet/basemap";
 import { basemaps } from "../../config.json";
 import "../../App.css";
-import TimeSelector from "../../components/timeselector/timeselector";
-import Loading from "../../components/loading/loading";
+
 
 class SelectSource extends Component {
   state = {};
@@ -40,10 +40,10 @@ class Home extends Component {
   };
 
   onChangeDatetime = (new_datetime) => {
-    document.getElementById("home-loading").style.display = "block";
+    document.getElementById("time-loading").style.display = "block";
     var { datetime } = this.state;
     this.updateSnowline(datetime, new_datetime).then(() => {
-      document.getElementById("home-loading").style.display = "none";
+      document.getElementById("time-loading").style.display = "none";
     });
   };
 
@@ -104,6 +104,7 @@ class Home extends Component {
 
   async componentDidMount() {
     var { geojson, geojsonid, datetime } = this.state;
+    document.getElementById("time-loading").style.display = "block";
     var snowlines = await this.getSnowlineFiles();
     var snowline = await this.getSnowline(snowlines, datetime);
     var datearray = snowlines.data.map((s) => {
@@ -113,7 +114,12 @@ class Home extends Component {
     datetime = new Date(Math.max(...datearray));
     geojson = [snowline];
     geojsonid++;
-    this.setState({ geojson, geojsonid, snowlines, datearray, datetime });
+    this.setState(
+      { geojson, geojsonid, snowlines, datearray, datetime },
+      () => {
+        document.getElementById("time-loading").style.display = "none";
+      }
+    );
   }
 
   render() {
@@ -137,9 +143,6 @@ class Home extends Component {
         </div>
         <div className="about">
           <About />
-        </div>
-        <div className="loading" id="home-loading">
-          <Loading />
         </div>
         <div className="selectbasemap">
           <SelectBasemap
