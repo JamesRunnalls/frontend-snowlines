@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { basemaps, topolink } from "../../config.json";
 import L from "leaflet";
+import "./leaflet_geotiff";
 import "./leaflet_colorpicker";
 import "./css/leaflet.css";
 
@@ -50,7 +51,7 @@ class Basemap extends Component {
     }
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     var center = [46.501, 7.992];
     if ("center" in this.props) {
       center = this.props.center;
@@ -86,7 +87,7 @@ class Basemap extends Component {
       zoomControl,
       center: center,
       zoom: zoom,
-      minZoom: 9,
+      minZoom: 5,
       maxZoom: 15,
       maxBoundsViscosity: 0.5,
     });
@@ -95,7 +96,7 @@ class Basemap extends Component {
     var southWest = L.latLng(45.7, 5.7);
     var northEast = L.latLng(48.1, 10.65);
     var bounds = L.latLngBounds(southWest, northEast);
-    this.map.setMaxBounds(bounds);
+    //this.map.setMaxBounds(bounds);
 
     var colorpicker = L.tileLayer
       .colorPicker(topolink, {
@@ -141,6 +142,7 @@ class Basemap extends Component {
         onChangeLocation([lat, lng], zoom);
       });
     }
+    var layer = L.leafletGeotiff("https://snowlines-geotiff.s3.eu-central-1.amazonaws.com/test.tif").addTo(this.map);
   }
 
   componentDidUpdate(prevProps) {
