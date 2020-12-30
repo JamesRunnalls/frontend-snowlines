@@ -37,7 +37,6 @@ L.LeafletGeotiff = L.ImageOverlay.extend({
     }
   },
   _getData: async function () {
-    var self = this;
     var { data } = await axios.get(this._url, {
       responseType: "arraybuffer",
     });
@@ -184,11 +183,10 @@ L.LeafletGeotiff = L.ImageOverlay.extend({
       args.plotHeight = args.yFinish - args.yStart;
 
       if (args.plotWidth <= 0 || args.plotHeight <= 0) {
-        console.log(this.options.name, " is off screen.");
-        var plotCanvas = document.createElement("canvas");
+        let plotCanvas = document.createElement("canvas");
         plotCanvas.width = this.size.x;
         plotCanvas.height = this.size.y;
-        var ctx = plotCanvas.getContext("2d");
+        let ctx = plotCanvas.getContext("2d");
         ctx.clearRect(0, 0, plotCanvas.width, plotCanvas.height);
         this._image.src = plotCanvas.toDataURL();
         return;
@@ -206,10 +204,10 @@ L.LeafletGeotiff = L.ImageOverlay.extend({
         this.raster.height;
 
       //Draw image data to canvas and pass to image element
-      var plotCanvas = document.createElement("canvas");
+      let plotCanvas = document.createElement("canvas");
       plotCanvas.width = this.size.x;
       plotCanvas.height = this.size.y;
-      var ctx = plotCanvas.getContext("2d");
+      let ctx = plotCanvas.getContext("2d");
       ctx.clearRect(0, 0, plotCanvas.width, plotCanvas.height);
 
       this._render(this.raster, plotCanvas, ctx, args);
@@ -218,37 +216,28 @@ L.LeafletGeotiff = L.ImageOverlay.extend({
     }
   },
   _render: function (raster, plotCanvas, ctx, args) {
-    console.log(args);
-    ctx.beginPath();
-    ctx.rect(args.xStart, args.yStart, args.plotWidth, args.plotHeight);
-    ctx.stroke();
-
     var imgData = ctx.createImageData(args.plotWidth, args.plotHeight);
+    var n = Math.abs(Math.min(args.rasterPixelBounds.min.y, 0));
+    var e = Math.abs(Math.min(args.xFinish - args.rasterPixelBounds.max.x, 0));
+    var s = Math.abs(Math.min(args.yFinish - args.rasterPixelBounds.max.y, 0));
+    var w = Math.abs(Math.min(args.rasterPixelBounds.min.x, 0));
     for (let y = 0; y < args.plotHeight; y++) {
-      let yy = Math.round((y / args.plotHeight) * raster.height);
+      let yy = Math.round(
+        ((y + n) / (args.plotHeight + n + s)) * raster.height
+      );
       for (let x = 0; x < args.plotWidth; x++) {
-        let xx = Math.round((x / args.plotWidth) * raster.width);
-        let i = y * args.plotWidth + x;
+        let xx = Math.round(
+          ((x + w) / (args.plotWidth + e + w)) * raster.width
+        );
         let ii = yy * raster.width + xx;
+        let i = y * args.plotWidth + x;
         imgData.data[i * 4 + 0] = raster.data[0][ii];
-        imgData.data[i * 4 + 1] = raster.data[0][ii];
-        imgData.data[i * 4 + 2] = raster.data[0][ii];
+        imgData.data[i * 4 + 1] = raster.data[1][ii];
+        imgData.data[i * 4 + 2] = raster.data[2][ii];
         imgData.data[i * 4 + 3] = 255;
       }
     }
     ctx.putImageData(imgData, args.xStart, args.yStart);
-
-    /*var imgData = ctx.createImageData(args.plotWidth, args.plotHeight);
-    for (let y = 0; y < args.plotHeight; y++) {
-      for (let x = 0; x < args.plotWidth; x++) {
-        let i = y * args.plotWidth + x;
-        imgData.data[i * 4 + 0] = 190; // R value
-        imgData.data[i * 4 + 1] = 0; // G value
-        imgData.data[i * 4 + 2] = 210; // B value
-        imgData.data[i * 4 + 3] = 255; // A value
-      }
-    }
-    ctx.putImageData(imgData, args.xStart, args.yStart);*/
   },
   transform: function (rasterImageData, args) {
     //Create image data and Uint32 views of data to speed up copying

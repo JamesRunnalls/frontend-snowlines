@@ -93,10 +93,12 @@ class Basemap extends Component {
     });
     var map = this.map;
 
-    var southWest = L.latLng(45.7, 5.7);
-    var northEast = L.latLng(48.1, 10.65);
-    var bounds = L.latLngBounds(southWest, northEast);
-    //this.map.setMaxBounds(bounds);
+    if ("bounds" in this.props) {
+      var southWest = L.latLng(this.props.bounds[0], this.props.bounds[1]);
+      var northEast = L.latLng(this.props.bounds[2], this.props.bounds[3]);
+      var bounds = L.latLngBounds(southWest, northEast);
+      this.map.setMaxBounds(bounds);
+    }
 
     var colorpicker = L.tileLayer
       .colorPicker(topolink, {
@@ -142,7 +144,9 @@ class Basemap extends Component {
         onChangeLocation([lat, lng], zoom);
       });
     }
-    var layer = L.leafletGeotiff("https://snowlines-geotiff.s3.eu-central-1.amazonaws.com/test.tif").addTo(this.map);
+    L.leafletGeotiff(
+      "https://snowlines-geotiff.s3.eu-central-1.amazonaws.com/test.tif"
+    ).addTo(this.map);
   }
 
   componentDidUpdate(prevProps) {
