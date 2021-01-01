@@ -26,6 +26,15 @@ class Home extends Component {
     datefiles: [],
     geotiff: [""],
     menu: true,
+    about: false,
+  };
+
+  toggleAbout = () => {
+    this.setState({ about: !this.state.about });
+  };
+
+  toggleMenu = () => {
+    this.setState({ menu: !this.state.menu });
   };
 
   onChangeDatetime = (new_datetime) => {
@@ -130,12 +139,18 @@ class Home extends Component {
       geojsonid,
       geotiff,
       menu,
+      about,
     } = this.state;
     return (
       <div className="home">
         <div className={menu ? "menu open" : "menu closed"}>
           <div className="boundary" />
-          <Menu datetime={datetime} open={menu} />
+          <Menu
+            datetime={datetime}
+            open={menu}
+            toggleAbout={this.toggleAbout}
+            toggleMenu={this.toggleMenu}
+          />
         </div>
         <div className={menu ? "main open" : "main closed"}>
           <div className="basemap">
@@ -148,6 +163,7 @@ class Home extends Component {
               geojsonid={geojsonid}
               geotiff={geotiff}
             />
+            <About open={about} close={this.toggleAbout} />
           </div>
           <div className="timeselector">
             <div className="boundary" />

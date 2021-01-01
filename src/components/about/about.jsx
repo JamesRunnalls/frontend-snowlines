@@ -3,23 +3,14 @@ import explain from "./img/snowline.png";
 import "../../App.css";
 
 class About extends Component {
-  state = {
-    open: false,
-  };
-
-  toggle = () => {
-    this.setState({ open: !this.state.open });
-  };
   render() {
-    var { open } = this.state;
+    var { open, close } = this.props;
     return (
       <React.Fragment>
-        <div>
-          <div className="about-title" onClick={this.toggle}>
-            About Snowlines
-          </div>
-          {open && (
-            <div className="about-body">
+        {open && (
+          <div className="about">
+            <div className="close" onClick={close} >&#215;</div>
+            <div className="inner">
               <h3>What is snowlines.ch?</h3>
               <p>
                 The page comes from a great idea we had in 2020. We wanted to
@@ -34,11 +25,7 @@ class About extends Component {
                 south. Regions of snow can also include land or water that is
                 covered in ice, like frozen lakes and glaciers.
               </p>
-              <img
-                className="about-image"
-                src={explain}
-                alt="Snowline explained"
-              />
+              <img className="image" src={explain} alt="Snowline explained" />
               <h3>Why should I care where the snowlines are?</h3>
               <p>
                 If you stay at home, you don't need to care. However, we
@@ -100,8 +87,8 @@ class About extends Component {
                 and we are very happy for contributions.
               </p>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </React.Fragment>
     );
   }

@@ -8,7 +8,7 @@
 .home {
   position: fixed;
   left: 0;
-  right: 0;
+  top: 0;
   width: 100vw;
   height: 100vh;
 }
@@ -23,6 +23,7 @@
   z-index: 99;
   padding: 20px;
   box-sizing: border-box;
+  background-color: white;
 }
 
 .home .menu.open {
@@ -30,7 +31,24 @@
 }
 
 .home .menu.closed {
-  width: 10px;
+  width: 40px;
+}
+
+.home .menu.closed .closed {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  text-align: center;
+  padding-top: 21px;
+  font-size: 22px;
+  color: rgb(25, 51, 73);
+}
+
+.home .menu.closed .rotate {
+  width: 300px;
+  transform: rotate(90deg);
 }
 
 .home .menu .boundary {
@@ -55,7 +73,7 @@
 }
 
 .home .menu .tagline {
-  background-color: #F7FAFB;
+  background-color: #f7fafb;
   padding: 10px;
   text-align: center;
   color: rgb(25, 51, 73);
@@ -70,6 +88,34 @@
   padding-top: 3px;
 }
 
+.home .menu .buttons {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  text-align: right;
+  left: 0;
+}
+
+.home .menu .buttons button {
+  font-size: 16px;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.home .menu .buttons button.white {
+  color: rgb(25, 51, 73);
+  background-color: white;
+  border: none;
+}
+
+.home .menu .buttons button.blue {
+  color: white;
+  background-color: rgb(25, 51, 73);
+  border: none;
+  border-radius: 5px;
+}
+
 /* Home - Map */
 
 .home .main {
@@ -80,17 +126,56 @@
 }
 
 .home .main.open {
-  width: calc(100% - 408px);
+  width: calc(100vw - 408px);
 }
 
 .home .main.closed {
-  width: calc(100% - 10px);
+  width: calc(100% - 40px);
 }
 
 .home .main .basemap {
-  position: fixed;
+  position: absolute;
   height: calc(100% - 100px);
   width: 100%;
+}
+
+/* Home - About */
+
+.home .about {
+  background-color: #f7fafb;
+  position: absolute;
+  top: 20px;
+  width: calc(100% - 40px);
+  height: calc(100% - 40px);
+  padding: 40px;
+  box-sizing: border-box;
+  z-index: 999;
+  left: 20px;
+}
+
+.home .about .close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 5px 10px;
+  font-size: 40px;
+  cursor: pointer;
+}
+
+.home .about .inner {
+  overflow: auto;
+  height: 100%;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.home .about .inner::-webkit-scrollbar {
+  display: none;
+}
+
+.home .about img {
+  width: 100%;
+  max-width: 600px;
 }
 
 /* Home - Select Basemap */
