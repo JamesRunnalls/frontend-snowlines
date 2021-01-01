@@ -98,7 +98,7 @@ class TimeSelector extends Component {
         .attr("height", 36)
         .attr("width", daysize / 2 + 7)
         .attr("fill", "transparent")
-        .attr("stroke", "white")
+        .attr("stroke", "rgb(25, 51, 73)")
         .attr("rx", 4)
         .attr("ry", 4)
         .attr("x", x(hover_datetime) + 4)
@@ -127,7 +127,7 @@ class TimeSelector extends Component {
             .append("rect")
             .attr("height", 30)
             .attr("width", daysize / 2)
-            .attr("fill", "rgba(255,255,255,0.2)")
+            .attr("fill", "rgb(198, 211, 216)")
             .attr("rx", 4)
             .attr("ry", 4)
             .attr("x", x(new Date(min + (i + 0.25) * ds)))
@@ -140,7 +140,7 @@ class TimeSelector extends Component {
             });
 
           if (datearray.includes(min + i * ds)) {
-            rect.attr("fill", "rgba(255,255,255,0.9)").on("click", function () {
+            rect.attr("fill", "rgb(25, 51, 73)").on("click", function () {
               onChangeState(x.domain()[0], x.domain()[1]);
               onChangeDatetime(new Date(min + (i + 0.5) * ds));
             });
@@ -185,7 +185,6 @@ class TimeSelector extends Component {
     var { datetime } = this.props;
     return (
       <div id="timeselector">
-        <div className="gradient" />
         <div id="datevalue" className="datevalue">
           {datetime.toDateString()}
         </div>

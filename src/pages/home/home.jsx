@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import Header from "../../components/header/header";
 import About from "../../components/about/about";
-import Menu from '../../components/menu/menu';
+import Menu from "../../components/menu/menu";
 import SelectBasemap from "../../components/selectbasemap/selectbasemap";
 import TimeSelector from "../../components/timeselector/timeselector";
 import Basemap from "../../graphs/leaflet/basemap";
@@ -24,9 +24,8 @@ class Home extends Component {
     mindate: new Date(Date.now() - 12096e5),
     datearray: [],
     datefiles: [],
-    geotiff: [
-      "",
-    ],
+    geotiff: [""],
+    menu: true,
   };
 
   onChangeDatetime = (new_datetime) => {
@@ -130,47 +129,35 @@ class Home extends Component {
       geojson,
       geojsonid,
       geotiff,
+      menu,
     } = this.state;
     return (
       <div className="home">
-        <div className="header" onClick={this.clearGeotiff}>
-          <Header />
+        <div className={menu ? "menu open" : "menu closed"}>
+          <div className="boundary" />
         </div>
-        <div className="menu">
-          <Menu datetime={datetime}/>
-        </div>
-        <div className="about">
-          <About />
-        </div>
-        <div className="selectbasemap">
-          <SelectBasemap
-            basemap={basemap}
-            basemaps={basemaps}
-            zoom={zoom}
-            center={center}
-            onChangeBasemap={this.onChangeBasemap}
-          />
-        </div>
-        <div className="timeselector">
-          <TimeSelector
-            datetime={datetime}
-            datearray={datearray}
-            mindate={mindate}
-            maxdate={maxdate}
-            daysize={30}
-            onChangeDatetime={this.onChangeDatetime}
-          />
-        </div>
-        <div className="basemap">
-          <Basemap
-            basemap={basemap}
-            zoom={zoom}
-            center={center}
-            onChangeLocation={this.onChangeLocation}
-            geojson={geojson}
-            geojsonid={geojsonid}
-            geotiff={geotiff}
-          />
+        <div className={menu ? "main open" : "main closed"}>
+          <div className="basemap">
+            <Basemap
+              basemap={basemap}
+              zoom={zoom}
+              center={center}
+              onChangeLocation={this.onChangeLocation}
+              geojson={geojson}
+              geojsonid={geojsonid}
+              geotiff={geotiff}
+            />
+          </div>
+          <div className="timeselector">
+            <TimeSelector
+              datetime={datetime}
+              datearray={datearray}
+              mindate={mindate}
+              maxdate={maxdate}
+              daysize={30}
+              onChangeDatetime={this.onChangeDatetime}
+            />
+          </div>
         </div>
       </div>
     );
