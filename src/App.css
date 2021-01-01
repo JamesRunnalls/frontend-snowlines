@@ -21,6 +21,8 @@
   left: 0;
   top: 0;
   z-index: 99;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .home .menu.open {
@@ -41,6 +43,31 @@
   width: 15px;
   position: absolute;
   right: -15px;
+  pointer-events: none;
+}
+
+.home .menu .date {
+  color: rgb(25, 51, 73);
+}
+
+.home .menu .date table {
+  margin: auto;
+}
+
+.home .menu .tagline {
+  background-color: #F7FAFB;
+  padding: 10px;
+  text-align: center;
+  color: rgb(25, 51, 73);
+}
+
+.home .menu .tagline .line1 {
+  font-size: 30px;
+}
+
+.home .menu .tagline .line2 {
+  font-size: 18px;
+  padding-top: 3px;
 }
 
 /* Home - Map */
@@ -62,7 +89,7 @@
 
 .home .main .basemap {
   position: fixed;
-  height: calc(100% - 80px);
+  height: calc(100% - 100px);
   width: 100%;
 }
 
@@ -111,13 +138,27 @@
   bottom: 0;
   z-index: 1;
   width: 100%;
-  height: 80px;
+  height: 100px;
   cursor: pointer;
   box-sizing: border-box;
-  padding: 10px 20px 0 20px;
+  padding: 20px 20px 0 20px;
+}
+
+.home .timeselector .boundary {
+  width: 100%;
+  background-image: linear-gradient(
+    0deg,
+    rgba(25, 25, 25, 0.4),
+    rgba(0, 0, 0, 0)
+  );
+  height: 15px;
+  position: absolute;
+  top: -15px;
+  pointer-events: none;
 }
 
 .home .timeselector .datevalue {
+  display: none;
   color: white;
   position: absolute;
   top: -35px;

@@ -135,6 +135,7 @@ class Home extends Component {
       <div className="home">
         <div className={menu ? "menu open" : "menu closed"}>
           <div className="boundary" />
+          <Menu datetime={datetime} open={menu} />
         </div>
         <div className={menu ? "main open" : "main closed"}>
           <div className="basemap">
@@ -149,6 +150,7 @@ class Home extends Component {
             />
           </div>
           <div className="timeselector">
+            <div className="boundary" />
             <TimeSelector
               datetime={datetime}
               datearray={datearray}
