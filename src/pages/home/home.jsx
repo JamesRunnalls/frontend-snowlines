@@ -2,26 +2,12 @@ import React, { Component } from "react";
 import axios from "axios";
 import Header from "../../components/header/header";
 import About from "../../components/about/about";
+import Menu from '../../components/menu/menu';
 import SelectBasemap from "../../components/selectbasemap/selectbasemap";
 import TimeSelector from "../../components/timeselector/timeselector";
 import Basemap from "../../graphs/leaflet/basemap";
 import { basemaps } from "../../config.json";
 import "../../App.css";
-
-
-class SelectSource extends Component {
-  state = {};
-  render() {
-    return <div></div>;
-  }
-}
-
-class Menu extends Component {
-  state = {};
-  render() {
-    return <div></div>;
-  }
-}
 
 class Home extends Component {
   state = {
@@ -37,6 +23,10 @@ class Home extends Component {
     maxdate: new Date(),
     mindate: new Date(Date.now() - 12096e5),
     datearray: [],
+    datefiles: [],
+    geotiff: [
+      "",
+    ],
   };
 
   onChangeDatetime = (new_datetime) => {
@@ -102,6 +92,10 @@ class Home extends Component {
     }
   };
 
+  clearGeotiff = () => {
+    this.setState({ geotiff: [] });
+  };
+
   async componentDidMount() {
     var { geojson, geojsonid, datetime } = this.state;
     document.getElementById("time-loading").style.display = "block";
@@ -135,11 +129,15 @@ class Home extends Component {
       center,
       geojson,
       geojsonid,
+      geotiff,
     } = this.state;
     return (
       <div className="home">
-        <div className="header">
+        <div className="header" onClick={this.clearGeotiff}>
           <Header />
+        </div>
+        <div className="menu">
+          <Menu datetime={datetime}/>
         </div>
         <div className="about">
           <About />
@@ -153,10 +151,6 @@ class Home extends Component {
             onChangeBasemap={this.onChangeBasemap}
           />
         </div>
-
-        <div className="selectsource">
-          <SelectSource />
-        </div>
         <div className="timeselector">
           <TimeSelector
             datetime={datetime}
@@ -167,7 +161,6 @@ class Home extends Component {
             onChangeDatetime={this.onChangeDatetime}
           />
         </div>
-        <Menu />
         <div className="basemap">
           <Basemap
             basemap={basemap}
@@ -176,6 +169,7 @@ class Home extends Component {
             onChangeLocation={this.onChangeLocation}
             geojson={geojson}
             geojsonid={geojsonid}
+            geotiff={geotiff}
           />
         </div>
       </div>

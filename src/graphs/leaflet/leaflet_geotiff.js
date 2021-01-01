@@ -56,15 +56,6 @@ L.LeafletGeotiff = L.ImageOverlay.extend({
     this.raster.height = image.getHeight();
     this._reset();
   },
-  getRasterArray: function () {
-    return this.raster.data;
-  },
-  getRasterCols: function () {
-    return this.raster.width;
-  },
-  getRasterRows: function () {
-    return this.raster.height;
-  },
   getValueAtLatLng: function (lat, lng) {
     try {
       var x = Math.floor(
@@ -129,29 +120,6 @@ L.LeafletGeotiff = L.ImageOverlay.extend({
 
         this._drawImage();
       }
-    }
-  },
-  setClip: function (clipLatLngs) {
-    this.options.clip = clipLatLngs;
-    this._reset();
-  },
-  _clipMaskToPixelPoints: function () {
-    if (this.options.clip) {
-      this.topLeft = this._map.latLngToLayerPoint(
-        this._map.getBounds().getNorthWest()
-      );
-      var pixelClipPoints = [];
-      for (var p = 0; p < this.options.clip.length; p++) {
-        var mercPoint = this._map.latLngToLayerPoint(this.options.clip[p]),
-          pixel = L.point(
-            mercPoint.x - this.topLeft.x,
-            mercPoint.y - this.topLeft.y
-          );
-        pixelClipPoints.push(pixel);
-      }
-      this._pixelClipPoints = pixelClipPoints;
-    } else {
-      this._pixelClipPoints = undefined;
     }
   },
   _drawImage: function () {

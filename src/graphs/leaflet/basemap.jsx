@@ -31,6 +31,22 @@ class Basemap extends Component {
     }
   };
 
+  updateGeotiff = (prevGeotiff, geotiff) => {
+    if (JSON.stringify(prevGeotiff) !== JSON.stringify(geotiff)) {
+      for (let i = 0; i < this.geotiff.length; i++) {
+        this.geotiff[i].onRemove(this.map);
+      }
+      this.geotiff = [];
+      if ("geotiff" in this.props) {
+        for (let i = 0; i < this.props.geotiff.length; i++) {
+          this.geotiff.push(
+            L.leafletGeotiff(this.props.geotiff[i]).addTo(this.map)
+          );
+        }
+      }
+    }
+  };
+
   updateGeoJSON = (previd, id, geojson) => {
     if (previd !== id) {
       this.geojson.forEach((g) => {
@@ -144,15 +160,22 @@ class Basemap extends Component {
         onChangeLocation([lat, lng], zoom);
       });
     }
-    L.leafletGeotiff(
-      "https://snowlines-geotiff.s3.eu-central-1.amazonaws.com/test.tif"
-    ).addTo(this.map);
+
+    this.geotiff = [];
+    if ("geotiff" in this.props) {
+      for (let i = 0; i < this.props.geotiff.length; i++) {
+        this.geotiff.push(
+          L.leafletGeotiff(this.props.geotiff[i]).addTo(this.map)
+        );
+      }
+    }
   }
 
   componentDidUpdate(prevProps) {
-    var { basemap, geojson, geojsonid } = this.props;
+    var { basemap, geojson, geojsonid, geotiff } = this.props;
     this.updateBasemap(prevProps.basemap, basemap);
     this.updateGeoJSON(prevProps.geojsonid, geojsonid, geojson);
+    this.updateGeotiff(prevProps.geotiff, geotiff);
   }
 
   render() {

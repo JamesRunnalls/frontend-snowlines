@@ -30,7 +30,7 @@
 
 .home .selectbasemap .minimap .leaflet-container {
   border-radius: 20px;
-  border: 2px solid black;
+  border: 1px solid white;
   box-shadow: 0px 0px 5px #fff;
 }
 
@@ -103,6 +103,21 @@
   .home .about {
     top: 55px;
   }
+}
+
+/* Home - Menu */
+
+.home .menu {
+  position: fixed;
+  z-index: 99;
+  top: 80px;
+  left: 0;
+  padding: 20px;
+}
+
+.home .menu .datetime {
+  color: white;
+  font-size: 32px;
 }
 
 /* Home - Time Selector */
