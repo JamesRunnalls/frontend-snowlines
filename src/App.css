@@ -28,6 +28,7 @@
 
 .home .menu.open {
   width: 408px;
+  max-width: 100%;
 }
 
 .home .menu.closed {
@@ -52,7 +53,7 @@
   transform: rotate(90deg);
   transform-origin: left;
   z-index: 9999999;
-  padding-bottom: 40px;
+  padding-bottom: 36px;
   font-size: 18px;
 }
 
@@ -173,7 +174,7 @@
 }
 
 .home .about .close:hover {
-  color: rgba(25, 51, 73, 1)
+  color: rgba(25, 51, 73, 1);
 }
 
 .home .about .inner {
@@ -196,9 +197,9 @@
 
 .home .selectbasemap {
   position: fixed;
-  bottom: 100px;
+  top: 20px;
   right: 20px;
-  z-index: 9;
+  z-index: 999;
 }
 
 .home .selectbasemap .minimap {

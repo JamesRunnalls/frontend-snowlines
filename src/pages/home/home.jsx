@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import axios from "axios";
-import Header from "../../components/header/header";
 import About from "../../components/about/about";
 import Menu from "../../components/menu/menu";
 import SelectBasemap from "../../components/selectbasemap/selectbasemap";
@@ -165,6 +164,15 @@ class Home extends Component {
               geojsonid={geojsonid}
               geotiff={geotiff}
             />
+            <div className="selectbasemap">
+              <SelectBasemap
+                basemap={basemap}
+                basemaps={basemaps}
+                zoom={zoom}
+                center={center}
+                onChangeBasemap={this.onChangeBasemap}
+              />
+            </div>
             <About open={about} close={this.toggleAbout} />
           </div>
           <div className="timeselector">
