@@ -34,7 +34,9 @@ class Home extends Component {
   };
 
   toggleMenu = () => {
-    this.setState({ menu: !this.state.menu });
+    this.setState({ menu: !this.state.menu }, () => {
+      window.dispatchEvent(new Event("resize"));
+    });
   };
 
   onChangeDatetime = (new_datetime) => {

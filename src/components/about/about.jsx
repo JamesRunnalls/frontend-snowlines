@@ -9,7 +9,7 @@ class About extends Component {
       <React.Fragment>
         {open && (
           <div className="about">
-            <div className="close" onClick={close} >&#215;</div>
+            <div className="close" onClick={close} title="Close">&#215;</div>
             <div className="inner">
               <h3>What is snowlines.ch?</h3>
               <p>

@@ -44,11 +44,16 @@
   padding-top: 21px;
   font-size: 22px;
   color: rgb(25, 51, 73);
+  cursor: pointer;
 }
 
 .home .menu.closed .rotate {
-  width: 300px;
+  width: 250px;
   transform: rotate(90deg);
+  transform-origin: left;
+  z-index: 9999999;
+  padding-bottom: 40px;
+  font-size: 18px;
 }
 
 .home .menu .boundary {
@@ -101,6 +106,10 @@
   padding: 10px 20px;
   cursor: pointer;
   margin-right: 20px;
+}
+
+.home .menu .buttons button:hover {
+  text-decoration: underline;
 }
 
 .home .menu .buttons button.white {
@@ -160,6 +169,11 @@
   padding: 5px 10px;
   font-size: 40px;
   cursor: pointer;
+  color: rgba(25, 51, 73, 0.7);
+}
+
+.home .about .close:hover {
+  color: rgba(25, 51, 73, 1)
 }
 
 .home .about .inner {
