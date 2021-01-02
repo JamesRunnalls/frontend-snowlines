@@ -3,6 +3,20 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
+a:link {
+  color: rgb(25, 51, 73);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:visited {
+  color: rgb(25, 51, 73);
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 /* Home */
 
 .home {
@@ -124,6 +138,36 @@
   background-color: rgb(25, 51, 73);
   border: none;
   border-radius: 5px;
+}
+
+.home .menu .selector .titles {
+  padding: 20px 0px;
+}
+
+.home .menu .selector .titles .title {
+  display: inline-block;
+  color: rgb(198, 211, 216);
+  font-size: 22px;
+  font-weight: bold;
+  padding: 0px 15px;
+  cursor: pointer;
+}
+
+.home .menu .selector .titles .title:hover {
+  color: rgb(25, 51, 73);
+}
+
+.home .menu .selector .titles .title.active {
+  color: rgb(25, 51, 73);
+}
+
+.home .menu .selector .contents .content {
+  position: absolute;
+  padding: 10px;
+}
+
+.home .menu .selector .contents .content.hide {
+  visibility: hidden;
 }
 
 /* Home - Map */
