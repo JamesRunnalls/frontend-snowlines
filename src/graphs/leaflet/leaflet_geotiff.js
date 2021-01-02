@@ -202,7 +202,15 @@ L.LeafletGeotiff = L.ImageOverlay.extend({
         imgData.data[i * 4 + 0] = raster.data[0][ii];
         imgData.data[i * 4 + 1] = raster.data[1][ii];
         imgData.data[i * 4 + 2] = raster.data[2][ii];
-        imgData.data[i * 4 + 3] = 255;
+        if (
+          raster.data[0][ii] === 0 &&
+          raster.data[1][ii] === 0 &&
+          raster.data[2][ii] === 0
+        ) {
+          imgData.data[i * 4 + 3] = 0;
+        } else {
+          imgData.data[i * 4 + 3] = 255;
+        }
       }
     }
     ctx.putImageData(imgData, args.xStart, args.yStart);

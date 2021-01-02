@@ -31,39 +31,37 @@ class Basemap extends Component {
     }
   };
 
-  updateGeotiff = (prevGeotiff, geotiff) => {
-    if (JSON.stringify(prevGeotiff) !== JSON.stringify(geotiff)) {
-      for (let i = 0; i < this.geotiff.length; i++) {
-        this.geotiff[i].onRemove(this.map);
-      }
-      this.geotiff = [];
-      if ("geotiff" in this.props) {
-        for (let i = 0; i < this.props.geotiff.length; i++) {
+  updateGeotiff = () => {
+    for (let i = 0; i < this.geotiff.length; i++) {
+      this.geotiff[i].onRemove(this.map);
+    }
+    this.geotiff = [];
+    if ("geotiff" in this.props) {
+      for (let i = 0; i < this.props.geotiff.length; i++) {
+        if (this.props.geotiff[i].display) {
           this.geotiff.push(
-            L.leafletGeotiff(this.props.geotiff[i]).addTo(this.map)
+            L.leafletGeotiff(this.props.geotiff[i].url).addTo(this.map)
           );
         }
       }
     }
   };
 
-  updateGeoJSON = (previd, id, geojson) => {
-    if (previd !== id) {
-      this.geojson.forEach((g) => {
-        this.map.removeLayer(g);
+  updateGeoJSON = (geojson) => {
+    this.geojson.forEach((g) => {
+      this.map.removeLayer(g);
+    });
+    this.geojson = [];
+    try {
+      geojson.forEach((g) => {
+        this.geojson.push(
+          L.geoJSON(g.data, {
+            style: g.style,
+          }).addTo(this.map)
+        );
       });
-      this.geojson = [];
-      try {
-        geojson.forEach((g) => {
-          this.geojson.push(
-            L.geoJSON(g.data, {
-              style: g.style,
-            }).addTo(this.map)
-          );
-        });
-      } catch (e) {
-        alert("GeoJSON not plotted.");
-      }
+    } catch (e) {
+      alert("GeoJSON not plotted.");
     }
   };
 
@@ -164,18 +162,23 @@ class Basemap extends Component {
     this.geotiff = [];
     if ("geotiff" in this.props) {
       for (let i = 0; i < this.props.geotiff.length; i++) {
-        this.geotiff.push(
-          L.leafletGeotiff(this.props.geotiff[i]).addTo(this.map)
-        );
+        if (this.props.geotiff[i].display) {
+          this.geotiff.push(
+            L.leafletGeotiff(this.props.geotiff[i].url).addTo(this.map)
+          );
+        }
       }
     }
   }
 
   componentDidUpdate(prevProps) {
-    var { basemap, geojson, geojsonid, geotiff } = this.props;
-    this.updateBasemap(prevProps.basemap, basemap);
-    this.updateGeoJSON(prevProps.geojsonid, geojsonid, geojson);
-    this.updateGeotiff(prevProps.geotiff, geotiff);
+    var { basemap, geojson, updatebasemap, finishUpdateBasemap } = this.props;
+    if (updatebasemap) {
+      this.updateBasemap(prevProps.basemap, basemap);
+      this.updateGeoJSON(geojson);
+      this.updateGeotiff();
+      finishUpdateBasemap();
+    }
   }
 
   render() {

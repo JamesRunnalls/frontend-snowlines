@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Eye from "./img/eye.svg";
 
 class Selector extends Component {
   state = {
@@ -9,6 +10,7 @@ class Selector extends Component {
   };
   render() {
     var titles = ["Snowlines", "Satellite", "SLF"];
+    var { satellites, changeObjectProperty } = this.props;
     var { selected } = this.state;
     return (
       <React.Fragment>
@@ -16,6 +18,7 @@ class Selector extends Component {
           {titles.map((t) => {
             return (
               <div
+                key={t}
                 onClick={() => {
                   this.changeSelected(t);
                 }}
@@ -35,12 +38,44 @@ class Selector extends Component {
           <div
             className={"Satellite" === selected ? "content" : "content hide"}
           >
-            Satellite
+            {satellites.map((s, index) => {
+              return (
+                <table className="satellite" key={s.name}>
+                  <tbody>
+                    <tr>
+                      <td
+                        onClick={() =>
+                          changeObjectProperty(
+                            "satellites",
+                            satellites,
+                            index,
+                            "display",
+                            !s.display
+                          )
+                        }
+                      >
+                        <img
+                          src={Eye}
+                          alt="Visibility"
+                          className={s.display ? "eye" : "eye fade"}
+                          title="Toggle Visibility"
+                        />
+                      </td>
+                      <td>{`${s.type} image from ${s.satellite} at ${s.time}`}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              );
+            })}
           </div>
           <div className={"SLF" === selected ? "content" : "content hide"}>
-            We are working to add the snow maps from <a href="https://www.slf.ch/en/index.html">WSL Institute for Snow
-            and Avalanche Research</a> (SLF) to Snowlines.ch, however as the data
-            is not "Open Data" we are trying to reach an agreement with SLF. 
+            We are working to add the snow maps from{" "}
+            <a href="https://www.slf.ch/en/index.html">
+              WSL Institute for Snow and Avalanche Research
+            </a>{" "}
+            (SLF) to Snowlines.ch, however as the data is not "Open Data" we are
+            trying to reach an agreement with SLF and will bring you this data
+            as soon as we get permission.
           </div>
         </div>
       </React.Fragment>
@@ -76,7 +111,14 @@ class DateFormat extends Component {
 class Menu extends Component {
   state = {};
   render() {
-    var { datetime, toggleAbout, toggleMenu, open } = this.props;
+    var {
+      datetime,
+      toggleAbout,
+      toggleMenu,
+      open,
+      satellites,
+      changeObjectProperty,
+    } = this.props;
 
     return (
       <React.Fragment>
@@ -86,11 +128,14 @@ class Menu extends Component {
               <DateFormat datetime={datetime} />
             </div>
             <div className="tagline">
-              <div className="line1">Snowline for Switzerland</div>
+              <div className="line1">Snowlines for Switzerland</div>
               <div className="line2">Mapping Snow from Satellite Imagery</div>
             </div>
             <div className="selector">
-              <Selector />
+              <Selector
+                satellites={satellites}
+                changeObjectProperty={changeObjectProperty}
+              />
             </div>
             <div className="buttons">
               <button className="white" onClick={toggleMenu}>

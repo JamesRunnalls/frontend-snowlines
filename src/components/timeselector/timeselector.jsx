@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
-import Loading from "../loading/loading";
 
 class TimeSelector extends Component {
   state = {
@@ -136,6 +135,7 @@ class TimeSelector extends Component {
               d3.select("#datevalue").node().innerHTML = new Date(
                 min + i * ds
               ).toDateString();
+              d3.select("#datevalue").node().style.display = "block";
               hover.attr("x", x(new Date(min + i * ds)) + 4);
             });
 
@@ -156,6 +156,7 @@ class TimeSelector extends Component {
       function mouseover() {}
 
       function mouseout() {
+        d3.select("#datevalue").node().style.display = "none";
         d3.select("#datevalue").node().innerHTML = datetime.toDateString();
         hover.attr("x", x(hover_datetime) + 4);
       }
@@ -187,9 +188,6 @@ class TimeSelector extends Component {
       <div id="timeselector">
         <div id="datevalue" className="datevalue">
           {datetime.toDateString()}
-        </div>
-        <div className="loading" id="time-loading">
-          <Loading />
         </div>
       </div>
     );

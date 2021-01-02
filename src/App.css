@@ -164,10 +164,33 @@ a:hover {
 .home .menu .selector .contents .content {
   position: absolute;
   padding: 10px;
+  width: calc(100% - 40px);
+  box-sizing: border-box;
 }
 
 .home .menu .selector .contents .content.hide {
   visibility: hidden;
+}
+
+.home .menu .selector .contents .content table.satellite {
+  width: 100%;
+  background-color: #f7fafb;
+  margin: 5px 0px;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.home .menu .selector .contents .content img.eye {
+  width: 20px;
+  cursor: pointer;
+}
+
+.home .menu .selector .contents .content img.eye.fade {
+  opacity: 0.3;
+}
+
+.home .menu .selector .contents .content img.eye.fade:hover {
+  opacity: 1;
 }
 
 /* Home - Map */
@@ -280,7 +303,7 @@ a:hover {
 .home .timeselector {
   position: absolute;
   bottom: 0;
-  z-index: 1;
+  z-index: 999;
   width: 100%;
   height: 100px;
   cursor: pointer;
@@ -303,11 +326,14 @@ a:hover {
 
 .home .timeselector .datevalue {
   display: none;
-  color: white;
   position: absolute;
-  top: -35px;
+  top: -45px;
   font-size: 26px;
-  left: 10px;
+  left: 5px;
+  background-color: #f7fafb;
+  color: rgb(25, 51, 73);
+  padding: 5px 10px;
+  border-radius: 5px;
 }
 
 .home .timeselector .xaxis {
@@ -331,14 +357,15 @@ a:hover {
 .home .loading {
   display: none;
   position: absolute;
-  bottom: 100px;
-  left: 10px;
+  z-index: 999;
+  top: 50%;
+  left: 50%;
 }
 
 .loader {
-  border: 4px solid rgba(255, 255, 255, 0.4);
+  border: 4px solid rgba(198, 211, 216, 0.4);
   border-radius: 50%;
-  border-top: 4px solid white;
+  border-top: 4px solid rgb(25, 51, 73);
   width: 30px;
   height: 30px;
   -webkit-animation: spin 2s linear infinite; /* Safari */
