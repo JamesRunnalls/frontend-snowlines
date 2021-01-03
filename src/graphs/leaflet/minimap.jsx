@@ -17,10 +17,6 @@ class MiniMap extends Component {
       zoom = this.props.zoom;
     }
 
-    this.layer = L.tileLayer(
-      "https://wmts20.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-grau/default/current/3857/{z}/{x}/{y}.jpeg"
-    );
-
     if ("basemap" in this.props) {
       var { basemap, basemaps } = this.props;
       this.layer = L.tileLayer(basemaps[basemap].url, {
