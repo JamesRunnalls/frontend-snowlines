@@ -172,7 +172,7 @@ a:hover {
   visibility: hidden;
 }
 
-.home .menu .selector .contents .content table.satellite {
+.home .menu .selector .contents .content table.list {
   width: 100%;
   background-color: #f7fafb;
   margin: 5px 0px;
@@ -180,17 +180,42 @@ a:hover {
   box-sizing: border-box;
 }
 
-.home .menu .selector .contents .content img.eye {
+.home .menu .selector .contents .content img.image {
   width: 20px;
   cursor: pointer;
+  padding: 3px;
 }
 
-.home .menu .selector .contents .content img.eye.fade {
+.home .menu .selector .contents .content img.image.fade {
   opacity: 0.3;
 }
 
-.home .menu .selector .contents .content img.eye.fade:hover {
+.home .menu .selector .contents .content img.image.fade:hover {
   opacity: 1;
+}
+
+@media screen and (max-width: 500px) {
+  .home .menu .tagline .line1 {
+    font-size: 22px;
+  }
+
+  .home .menu .tagline .line2 {
+    font-size: 14px;
+    padding-top: 0;
+  }
+
+  .home .menu .selector .titles {
+    padding: 10px 0 0 0;
+  }
+
+  .home .menu .selector .titles .title {
+    display: inline-block;
+    color: rgb(198, 211, 216);
+    font-size: 20px;
+    font-weight: bold;
+    padding: 0px 8px;
+    cursor: pointer;
+  }
 }
 
 /* Home - Map */

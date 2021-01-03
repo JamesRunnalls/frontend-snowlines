@@ -16,10 +16,9 @@ class Home extends Component {
     center: [46.501, 7.992],
     datetime: new Date(),
     basemaps: basemaps,
-    geojson: [],
-    snowlines: {},
+    snowlines_files: [],
+    snowlines: [],
     satellites: [],
-    snowline_color: "white",
     maxdate: new Date(),
     mindate: new Date(Date.now() - 12096e5),
     datearray: [],
@@ -63,40 +62,38 @@ class Home extends Component {
     this.setState({ center, zoom });
   };
 
+  roundDate = (datetime) => {
+    return Math.floor(datetime / (3600 * 24)) * (3600 * 24);
+  };
+
   getSnowlineFiles = async () => {
     var { data } = await axios.get(
       "https://snowlines-database.s3.eu-central-1.amazonaws.com/snowline.json"
     );
+    data = data.data.map((d) => {
+      d.url = data.bucket + "/" + d.url;
+      d.date = this.roundDate(d.datetime);
+      return d;
+    });
     return data;
   };
 
-  getSnowline = async (snowlines, datetime) => {
-    var { snowline_color } = this.state;
+  getSnowlines = async (snowlines_files, datetime) => {
     let unix = datetime.getTime() / 1000;
-    let { bucket, data } = snowlines;
-    let index = data.reduce((r, a, i, aa) => {
-      return i && Math.abs(aa[r].datetime - unix) < Math.abs(a.datetime - unix)
-        ? r
-        : i;
-    }, -1);
-    var snowline_data;
-    if (!("data" in data[index])) {
-      ({ data: snowline_data } = await axios.get(
-        bucket + "/" + data[index].url
-      ));
-      snowlines.data[index]["data"] = snowline_data;
-    } else {
-      snowline_data = data[index]["data"];
-    }
-    var style = {
-      color: snowline_color,
-      weight: 1,
-      opacity: 0.7,
-    };
-    var details = {
-      datetime: new Date(data[index].datetime * 1000),
-    };
-    return { data: snowline_data, style, details };
+    let date = this.roundDate(unix);
+    let data = snowlines_files.filter((s) => s.date === date);
+    data = data.map((d, index) => {
+      d.style = {
+        color: "white",
+        weight: 1,
+        opacity: 0.7,
+      };
+      d.dt = new Date(d.datetime * 1000);
+      d.display = index === 0 ? true : false;
+      d.time = this.formatTime(new Date(d.datetime * 1000));
+      return d;
+    });
+    return data;
   };
 
   formatDate = (date) => {
@@ -124,7 +121,7 @@ class Home extends Component {
     hours = hours % 12;
     hours = hours ? hours : 12;
     minutes = minutes < 10 ? "0" + minutes : minutes;
-    var strTime = hours + ":" + minutes + " " + ampm;
+    var strTime = hours + ":" + minutes + ampm;
     return strTime;
   };
 
@@ -152,9 +149,19 @@ class Home extends Component {
     var satellite = this.parseSatellite(name);
     var type = name
       .split("_")[0]
-      .replace("RGB", "Color")
-      .replace("SNOW", "Snow");
-    return { name, url, datetime, time, satellite, type, display: false };
+      .replace("RGB", "Color image")
+      .replace("SNOW", "Snow pixels");
+    var style = { opacity: 1 };
+    return {
+      name,
+      url,
+      datetime,
+      time,
+      satellite,
+      type,
+      style,
+      display: false,
+    };
   };
 
   getSatelliteImages = async (datetime) => {
@@ -170,12 +177,10 @@ class Home extends Component {
 
   updateDate = async (prevDatetime, datetime) => {
     if (prevDatetime !== datetime) {
-      var { snowlines, geojson } = this.state;
-      var snowline = await this.getSnowline(snowlines, datetime);
+      var { snowlines_files } = this.state;
+      var snowlines = await this.getSnowlines(snowlines_files, datetime);
       var satellites = await this.getSatelliteImages(datetime);
-      geojson = [snowline];
       this.setState({
-        geojson,
         snowlines,
         datetime,
         satellites,
@@ -185,21 +190,19 @@ class Home extends Component {
   };
 
   async componentDidMount() {
-    var { geojson, datetime } = this.state;
+    var { datetime } = this.state;
     document.getElementById("time-loading").style.display = "block";
-    var snowlines = await this.getSnowlineFiles();
-    var snowline = await this.getSnowline(snowlines, datetime);
-    var datearray = snowlines.data.map((s) => {
-      var ds = 24 * 3600;
-      return Math.floor(s.datetime / ds) * ds * 1000;
-    });
+    var snowlines_files = await this.getSnowlineFiles();
+    var datearray = snowlines_files.map(
+      (s) => this.roundDate(s.datetime) * 1000
+    );
     datetime = new Date(Math.max(...datearray));
     var satellites = await this.getSatelliteImages(datetime);
-    geojson = [snowline];
+    var snowlines = await this.getSnowlines(snowlines_files, datetime);
     this.setState(
       {
-        geojson,
         snowlines,
+        snowlines_files,
         datearray,
         datetime,
         satellites,
@@ -222,10 +225,10 @@ class Home extends Component {
       basemaps,
       zoom,
       center,
-      geojson,
       updatebasemap,
       menu,
       about,
+      snowlines,
       satellites,
     } = this.state;
     return (
@@ -237,6 +240,7 @@ class Home extends Component {
             open={menu}
             toggleAbout={this.toggleAbout}
             toggleMenu={this.toggleMenu}
+            snowlines={snowlines}
             satellites={satellites}
             changeObjectProperty={this.changeObjectProperty}
           />
@@ -251,7 +255,7 @@ class Home extends Component {
               zoom={zoom}
               center={center}
               onChangeLocation={this.onChangeLocation}
-              geojson={geojson}
+              geojson={snowlines}
               geotiff={satellites}
               updatebasemap={updatebasemap}
               finishUpdateBasemap={this.finishUpdateBasemap}

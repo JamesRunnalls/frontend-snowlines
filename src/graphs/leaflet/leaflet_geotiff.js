@@ -1,5 +1,4 @@
 import L from "leaflet";
-import axios from "axios";
 import * as GeoTIFF from "geotiff";
 
 L.LeafletGeotiff = L.ImageOverlay.extend({
@@ -7,14 +6,15 @@ L.LeafletGeotiff = L.ImageOverlay.extend({
     opacity: 1,
   },
 
-  initialize: function (url, options) {
-    this._url = url;
+  initialize: function (data, options) {
+    this._url = "snowlines_geotiff.tif"
+    this._data = data;
     this.raster = {};
     L.Util.setOptions(this, options);
     this._getData();
   },
-  setURL: function (newURL) {
-    this._url = newURL;
+  setData: function (newData) {
+    this._data = newData;
     this._getData();
   },
   onAdd: function (map) {
@@ -37,10 +37,7 @@ L.LeafletGeotiff = L.ImageOverlay.extend({
     }
   },
   _getData: async function () {
-    var { data } = await axios.get(this._url, {
-      responseType: "arraybuffer",
-    });
-    const tiff = await GeoTIFF.fromArrayBuffer(data);
+    const tiff = await GeoTIFF.fromArrayBuffer(this._data);
     const image = await tiff.getImage();
     var meta = image.getFileDirectory();
     var x_min = meta.ModelTiepoint[3];
@@ -271,8 +268,8 @@ L.LeafletGeotiff = L.ImageOverlay.extend({
   },
 });
 
-L.leafletGeotiff = function (url, options) {
-  return new L.LeafletGeotiff(url, options);
+L.leafletGeotiff = function (data, options) {
+  return new L.LeafletGeotiff(data, options);
 };
 
 if (typeof module !== "undefined" && typeof module.exports !== "undefined") {

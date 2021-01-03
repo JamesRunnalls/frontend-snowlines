@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import Eye from "./img/eye.svg";
+import Settings from "./img/settings.svg";
+import Download from "./img/download.svg";
 
 class Selector extends Component {
   state = {
@@ -10,7 +12,7 @@ class Selector extends Component {
   };
   render() {
     var titles = ["Snowlines", "Satellite", "SLF"];
-    var { satellites, changeObjectProperty } = this.props;
+    var { snowlines, satellites, changeObjectProperty } = this.props;
     var { selected } = this.state;
     return (
       <React.Fragment>
@@ -33,14 +35,60 @@ class Selector extends Component {
           <div
             className={"Snowlines" === selected ? "content" : "content hide"}
           >
-            Snowlines
+            {snowlines.map((s, index) => {
+              return (
+                <table className="list" key={s.url}>
+                  <tbody>
+                    <tr>
+                      <td
+                        onClick={() =>
+                          changeObjectProperty(
+                            "snowlines",
+                            snowlines,
+                            index,
+                            "display",
+                            !s.display
+                          )
+                        }
+                      >
+                        <img
+                          src={Eye}
+                          alt="Visibility"
+                          className={s.display ? "image" : "image fade"}
+                          title="Toggle Visibility"
+                        />
+                      </td>
+                      <td>{`Snowline generated at ${s.time}`}</td>
+                      <td>
+                        <img
+                          src={Settings}
+                          alt="Settings"
+                          className="image fade"
+                          title="Settings"
+                        />
+                      </td>
+                      <td>
+                        <a href={s.url}>
+                          <img
+                            src={Download}
+                            alt="Download"
+                            className="image fade"
+                            title="Download as GeoJSON"
+                          />
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              );
+            })}
           </div>
           <div
             className={"Satellite" === selected ? "content" : "content hide"}
           >
             {satellites.map((s, index) => {
               return (
-                <table className="satellite" key={s.name}>
+                <table className="list" key={s.name}>
                   <tbody>
                     <tr>
                       <td
@@ -57,11 +105,29 @@ class Selector extends Component {
                         <img
                           src={Eye}
                           alt="Visibility"
-                          className={s.display ? "eye" : "eye fade"}
+                          className={s.display ? "image" : "image fade"}
                           title="Toggle Visibility"
                         />
                       </td>
-                      <td>{`${s.type} image from ${s.satellite} at ${s.time}`}</td>
+                      <td>{`${s.type}, ${s.satellite} at ${s.time}`}</td>
+                      <td>
+                        <img
+                          src={Settings}
+                          alt="Settings"
+                          className="image fade"
+                          title="Settings"
+                        />
+                      </td>
+                      <td>
+                        <a href={s.url}>
+                          <img
+                            src={Download}
+                            alt="Download"
+                            className="image fade"
+                            title="Download as Geotiff"
+                          />
+                        </a>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -117,6 +183,7 @@ class Menu extends Component {
       toggleMenu,
       open,
       satellites,
+      snowlines,
       changeObjectProperty,
     } = this.props;
 
@@ -133,6 +200,7 @@ class Menu extends Component {
             </div>
             <div className="selector">
               <Selector
+                snowlines={snowlines}
                 satellites={satellites}
                 changeObjectProperty={changeObjectProperty}
               />

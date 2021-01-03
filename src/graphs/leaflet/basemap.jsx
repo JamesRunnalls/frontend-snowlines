@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { basemaps, topolink } from "../../config.json";
+import axios from "axios";
 import L from "leaflet";
 import "./leaflet_geotiff";
 import "./leaflet_colorpicker";
@@ -31,41 +32,72 @@ class Basemap extends Component {
     }
   };
 
-  updateGeotiff = () => {
+  updateGeotiff = async (geotiff) => {
     for (let i = 0; i < this.geotiff.length; i++) {
       this.geotiff[i].onRemove(this.map);
     }
     this.geotiff = [];
-    if ("geotiff" in this.props) {
-      for (let i = 0; i < this.props.geotiff.length; i++) {
-        if (this.props.geotiff[i].display) {
-          this.geotiff.push(
-            L.leafletGeotiff(this.props.geotiff[i].url).addTo(this.map)
-          );
+    try {
+      for (let i = 0; i < geotiff.length; i++) {
+        if (geotiff[i].display) {
+          let data = await this.getGeotiff(geotiff[i].url);
+          this.geotiff.push(L.leafletGeotiff(data).addTo(this.map));
         }
       }
+    } catch (e) {
+      alert("Failed to plot Geotiff");
     }
   };
 
-  updateGeoJSON = (geojson) => {
+  getGeotiff = async (url) => {
+    if (Object.keys(this.store).includes(url)) {
+      return this.store[url];
+    } else {
+      document.getElementById("time-loading").style.display = "block";
+      var { data } = await axios.get(url, {
+        responseType: "arraybuffer",
+      });
+      document.getElementById("time-loading").style.display = "none";
+      this.store[url] = data;
+      return data;
+    }
+  };
+
+  updateGeoJSON = async (geojson) => {
     this.geojson.forEach((g) => {
       this.map.removeLayer(g);
     });
     this.geojson = [];
     try {
-      geojson.forEach((g) => {
-        this.geojson.push(
-          L.geoJSON(g.data, {
-            style: g.style,
-          }).addTo(this.map)
-        );
-      });
+      for (let i = 0; i < geojson.length; i++) {
+        if (geojson[i].display) {
+          let data = await this.getGeoJSON(geojson[i].url);
+          this.geojson.push(
+            L.geoJSON(data, {
+              style: geojson[i].style,
+            }).addTo(this.map)
+          );
+        }
+      }
     } catch (e) {
-      alert("GeoJSON not plotted.");
+      alert("Failed to plot GeoJSON");
+    }
+  };
+
+  getGeoJSON = async (url) => {
+    if (Object.keys(this.store).includes(url)) {
+      return this.store[url];
+    } else {
+      document.getElementById("time-loading").style.display = "block";
+      var { data } = await axios.get(url);
+      document.getElementById("time-loading").style.display = "none";
+      this.store[url] = data;
+      return data;
     }
   };
 
   async componentDidMount() {
+    this.store = {};
     var center = [46.501, 7.992];
     if ("center" in this.props) {
       center = this.props.center;
@@ -87,6 +119,7 @@ class Basemap extends Component {
     }
 
     this.geojson = [];
+    this.geotiff = [];
 
     var zoomControl = false;
     var { setZoomIn, setZoomOut } = this.props;
@@ -158,25 +191,20 @@ class Basemap extends Component {
         onChangeLocation([lat, lng], zoom);
       });
     }
-
-    this.geotiff = [];
-    if ("geotiff" in this.props) {
-      for (let i = 0; i < this.props.geotiff.length; i++) {
-        if (this.props.geotiff[i].display) {
-          this.geotiff.push(
-            L.leafletGeotiff(this.props.geotiff[i].url).addTo(this.map)
-          );
-        }
-      }
-    }
   }
 
   componentDidUpdate(prevProps) {
-    var { basemap, geojson, updatebasemap, finishUpdateBasemap } = this.props;
+    var {
+      basemap,
+      geojson,
+      geotiff,
+      updatebasemap,
+      finishUpdateBasemap,
+    } = this.props;
     if (updatebasemap) {
       this.updateBasemap(prevProps.basemap, basemap);
       this.updateGeoJSON(geojson);
-      this.updateGeotiff();
+      this.updateGeotiff(geotiff);
       finishUpdateBasemap();
     }
   }
