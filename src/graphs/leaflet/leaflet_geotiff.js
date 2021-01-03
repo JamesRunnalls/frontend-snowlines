@@ -7,11 +7,15 @@ L.LeafletGeotiff = L.ImageOverlay.extend({
   },
 
   initialize: function (data, options) {
-    this._url = "snowlines_geotiff.tif"
+    this._url = "snowlines_geotiff.tif";
     this._data = data;
     this.raster = {};
     L.Util.setOptions(this, options);
     this._getData();
+  },
+  changeOpacity: function (opacity) {
+    this._image.style.opacity = opacity;
+    this.options.opacity = opacity;
   },
   setData: function (newData) {
     this._data = newData;
@@ -178,9 +182,11 @@ L.LeafletGeotiff = L.ImageOverlay.extend({
       this._render(this.raster, plotCanvas, ctx, args);
 
       this._image.src = String(plotCanvas.toDataURL());
+      this._image.style.opacity = this.options.opacity;
     }
   },
   _render: function (raster, plotCanvas, ctx, args) {
+    ctx.globalAlpha = this.options.opacity;
     var imgData = ctx.createImageData(args.plotWidth, args.plotHeight);
     var n = Math.abs(Math.min(args.rasterPixelBounds.min.y, 0));
     var e = Math.abs(Math.min(args.xFinish - args.rasterPixelBounds.max.x, 0));

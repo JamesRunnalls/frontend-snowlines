@@ -28,6 +28,69 @@ class Home extends Component {
     updatebasemap: false,
   };
 
+  compare = (a, b) => {
+    if (a.type < b.type) {
+      return 1;
+    }
+    if (a.type > b.type) {
+      return -1;
+    }
+    return 0;
+  };
+
+  roundDate = (datetime) => {
+    return Math.floor(datetime / (3600 * 24)) * (3600 * 24);
+  };
+
+  formatDate = (date) => {
+    let month = "" + (date.getMonth() + 1);
+    let day = "" + date.getDate();
+    let year = date.getFullYear();
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+    return [year, month, day].join("");
+  };
+
+  formatTime = (date) => {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? "pm" : "am";
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    var strTime = hours + ":" + minutes + ampm;
+    return strTime;
+  };
+
+  parseDate = (str) => {
+    var year = parseInt(str.substring(0, 4));
+    var month = parseInt(str.substring(4, 6));
+    var day = parseInt(str.substring(6, 8));
+    var hour = parseInt(str.substring(9, 11));
+    var minute = parseInt(str.substring(11, 13));
+    return new Date(year, month, day, hour, minute);
+  };
+
+  parseSatellite = (name) => {
+    var satellites = ["S3A", "S3B", "S2A", "S2B"];
+    var satellite = "";
+    for (let i = 0; i < satellites.length; i++) {
+      if (name.includes(satellites[i])) {
+        satellite = satellites[i];
+      }
+    }
+    return satellite;
+  };
+
+  changeObjectProperty = (name, obj, index, key, property, updatebasemap) => {
+    obj[index][key] = property;
+    if (updatebasemap) {
+      this.setState({ [name]: obj, updatebasemap: [name, key] });
+    } else {
+      this.setState({ [name]: obj });
+    }
+  };
+
   finishUpdateBasemap = () => {
     this.setState({ updatebasemap: false });
   };
@@ -62,10 +125,6 @@ class Home extends Component {
     this.setState({ center, zoom });
   };
 
-  roundDate = (datetime) => {
-    return Math.floor(datetime / (3600 * 24)) * (3600 * 24);
-  };
-
   getSnowlineFiles = async () => {
     var { data } = await axios.get(
       "https://snowlines-database.s3.eu-central-1.amazonaws.com/snowline.json"
@@ -83,62 +142,16 @@ class Home extends Component {
     let date = this.roundDate(unix);
     let data = snowlines_files.filter((s) => s.date === date);
     data = data.map((d, index) => {
-      d.style = {
-        color: "white",
-        weight: 1,
-        opacity: 0.7,
-      };
+      d.color = "white";
+      d.weight = 1;
+      d.opacity = 0.2;
       d.dt = new Date(d.datetime * 1000);
       d.display = index === 0 ? true : false;
       d.time = this.formatTime(new Date(d.datetime * 1000));
+      d.settings = false;
       return d;
     });
     return data;
-  };
-
-  formatDate = (date) => {
-    let month = "" + (date.getMonth() + 1);
-    let day = "" + date.getDate();
-    let year = date.getFullYear();
-    if (month.length < 2) month = "0" + month;
-    if (day.length < 2) day = "0" + day;
-    return [year, month, day].join("");
-  };
-
-  parseDate = (str) => {
-    var year = parseInt(str.substring(0, 4));
-    var month = parseInt(str.substring(4, 6));
-    var day = parseInt(str.substring(6, 8));
-    var hour = parseInt(str.substring(9, 11));
-    var minute = parseInt(str.substring(11, 13));
-    return new Date(year, month, day, hour, minute);
-  };
-
-  formatTime = (date) => {
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var ampm = hours >= 12 ? "pm" : "am";
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    minutes = minutes < 10 ? "0" + minutes : minutes;
-    var strTime = hours + ":" + minutes + ampm;
-    return strTime;
-  };
-
-  parseSatellite = (name) => {
-    var satellites = ["S3A", "S3B", "S2A", "S2B"];
-    var satellite = "";
-    for (let i = 0; i < satellites.length; i++) {
-      if (name.includes(satellites[i])) {
-        satellite = satellites[i];
-      }
-    }
-    return satellite;
-  };
-
-  changeObjectProperty = (name, obj, index, key, property) => {
-    obj[index][key] = property;
-    this.setState({ [name]: obj, updatebasemap: true });
   };
 
   getSatelliteInfo = (name) => {
@@ -151,7 +164,7 @@ class Home extends Component {
       .split("_")[0]
       .replace("RGB", "Color image")
       .replace("SNOW", "Snow pixels");
-    var style = { opacity: 1 };
+    var opacity = 1;
     return {
       name,
       url,
@@ -159,8 +172,9 @@ class Home extends Component {
       time,
       satellite,
       type,
-      style,
+      opacity,
       display: false,
+      settings: false,
     };
   };
 
@@ -172,6 +186,7 @@ class Home extends Component {
         ".json"
     );
     data = data.map((d) => this.getSatelliteInfo(d));
+    data.sort(this.compare);
     return data;
   };
 

@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import Slider from "@material-ui/core/Slider";
+import ColorSelector from "../colorselector/colorselector";
+import DateFormat from "../dateformat/dateformat";
 import Eye from "./img/eye.svg";
 import Settings from "./img/settings.svg";
 import Download from "./img/download.svg";
@@ -10,6 +13,7 @@ class Selector extends Component {
   changeSelected = (selected) => {
     this.setState({ selected });
   };
+
   render() {
     var titles = ["Snowlines", "Satellite", "SLF"];
     var { snowlines, satellites, changeObjectProperty } = this.props;
@@ -37,49 +41,100 @@ class Selector extends Component {
           >
             {snowlines.map((s, index) => {
               return (
-                <table className="list" key={s.url}>
-                  <tbody>
-                    <tr>
-                      <td
-                        onClick={() =>
-                          changeObjectProperty(
-                            "snowlines",
-                            snowlines,
-                            index,
-                            "display",
-                            !s.display
-                          )
-                        }
-                      >
-                        <img
-                          src={Eye}
-                          alt="Visibility"
-                          className={s.display ? "image" : "image fade"}
-                          title="Toggle Visibility"
-                        />
-                      </td>
-                      <td>{`Snowline generated at ${s.time}`}</td>
-                      <td>
-                        <img
-                          src={Settings}
-                          alt="Settings"
-                          className="image fade"
-                          title="Settings"
-                        />
-                      </td>
-                      <td>
-                        <a href={s.url}>
+                <div key={s.url} className="list">
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td
+                          onClick={() =>
+                            changeObjectProperty(
+                              "snowlines",
+                              snowlines,
+                              index,
+                              "display",
+                              !s.display,
+                              true
+                            )
+                          }
+                        >
                           <img
-                            src={Download}
-                            alt="Download"
-                            className="image fade"
-                            title="Download as GeoJSON"
+                            src={Eye}
+                            alt="Visibility"
+                            className={s.display ? "image" : "image fade"}
+                            title="Toggle Visibility"
                           />
-                        </a>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                        </td>
+                        <td>{`Snowline generated at ${s.time}`}</td>
+                        <td
+                          onClick={() =>
+                            changeObjectProperty(
+                              "snowlines",
+                              snowlines,
+                              index,
+                              "settings",
+                              !s.settings
+                            )
+                          }
+                        >
+                          <img
+                            src={Settings}
+                            alt="Settings"
+                            className={s.settings ? "image" : "image fade"}
+                            title="Settings"
+                          />
+                        </td>
+                        <td>
+                          <a href={s.url}>
+                            <img
+                              src={Download}
+                              alt="Download"
+                              className="image fade"
+                              title="Download as GeoJSON"
+                            />
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  {s.settings && (
+                    <div className="settings">
+                      <div className="slider" title="Edit Opacity">
+                        <Slider
+                          value={s.opacity}
+                          onChange={(event, newValue) =>
+                            changeObjectProperty(
+                              "snowlines",
+                              snowlines,
+                              index,
+                              "opacity",
+                              newValue,
+                              true
+                            )
+                          }
+                          step={0.01}
+                          min={0}
+                          max={1}
+                          aria-labelledby="continuous-slider"
+                        />
+                      </div>
+                      <div className="color">
+                        <ColorSelector
+                          onChange={(newValue) =>
+                            changeObjectProperty(
+                              "snowlines",
+                              snowlines,
+                              index,
+                              "color",
+                              newValue,
+                              true
+                            )
+                          }
+                          value={s.color}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
               );
             })}
           </div>
@@ -88,49 +143,85 @@ class Selector extends Component {
           >
             {satellites.map((s, index) => {
               return (
-                <table className="list" key={s.name}>
-                  <tbody>
-                    <tr>
-                      <td
-                        onClick={() =>
-                          changeObjectProperty(
-                            "satellites",
-                            satellites,
-                            index,
-                            "display",
-                            !s.display
-                          )
-                        }
-                      >
-                        <img
-                          src={Eye}
-                          alt="Visibility"
-                          className={s.display ? "image" : "image fade"}
-                          title="Toggle Visibility"
-                        />
-                      </td>
-                      <td>{`${s.type}, ${s.satellite} at ${s.time}`}</td>
-                      <td>
-                        <img
-                          src={Settings}
-                          alt="Settings"
-                          className="image fade"
-                          title="Settings"
-                        />
-                      </td>
-                      <td>
-                        <a href={s.url}>
+                <div key={s.url} className="list">
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td
+                          onClick={() =>
+                            changeObjectProperty(
+                              "satellites",
+                              satellites,
+                              index,
+                              "display",
+                              !s.display,
+                              true
+                            )
+                          }
+                        >
                           <img
-                            src={Download}
-                            alt="Download"
-                            className="image fade"
-                            title="Download as Geotiff"
+                            src={Eye}
+                            alt="Visibility"
+                            className={s.display ? "image" : "image fade"}
+                            title="Toggle Visibility"
                           />
-                        </a>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                        </td>
+                        <td>{`${s.type}, ${s.satellite} at ${s.time}`}</td>
+                        <td
+                          onClick={() =>
+                            changeObjectProperty(
+                              "satellites",
+                              satellites,
+                              index,
+                              "settings",
+                              !s.settings
+                            )
+                          }
+                        >
+                          <img
+                            src={Settings}
+                            alt="Settings"
+                            className={s.settings ? "image" : "image fade"}
+                            title="Settings"
+                          />
+                        </td>
+                        <td>
+                          <a href={s.url}>
+                            <img
+                              src={Download}
+                              alt="Download"
+                              className="image fade"
+                              title="Download as Geotiff"
+                            />
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  {s.settings && (
+                    <div className="settings">
+                      <div className="slider" title="Edit Opacity">
+                        <Slider
+                          value={s.opacity}
+                          onChange={(event, newValue) =>
+                            changeObjectProperty(
+                              "satellites",
+                              satellites,
+                              index,
+                              "opacity",
+                              newValue, 
+                              true
+                            )
+                          }
+                          step={0.01}
+                          min={0}
+                          max={1}
+                          aria-labelledby="continuous-slider"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
               );
             })}
           </div>
@@ -145,31 +236,6 @@ class Selector extends Component {
           </div>
         </div>
       </React.Fragment>
-    );
-  }
-}
-
-class DateFormat extends Component {
-  render() {
-    var { datetime } = this.props;
-    return (
-      <table>
-        <tbody>
-          <tr>
-            <td rowSpan="2" style={{ fontSize: "110px" }}>
-              {datetime.getDate()}
-            </td>
-            <td style={{ fontSize: "40px", verticalAlign: "bottom" }}>
-              {datetime.toLocaleString("default", { month: "short" })}
-            </td>
-          </tr>
-          <tr>
-            <td style={{ fontSize: "40px", verticalAlign: "top" }}>
-              {datetime.getFullYear()}
-            </td>
-          </tr>
-        </tbody>
-      </table>
     );
   }
 }

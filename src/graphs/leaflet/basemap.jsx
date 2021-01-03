@@ -32,20 +32,38 @@ class Basemap extends Component {
     }
   };
 
-  updateGeotiff = async (geotiff) => {
-    for (let i = 0; i < this.geotiff.length; i++) {
-      this.geotiff[i].onRemove(this.map);
-    }
-    this.geotiff = [];
-    try {
-      for (let i = 0; i < geotiff.length; i++) {
-        if (geotiff[i].display) {
-          let data = await this.getGeotiff(geotiff[i].url);
-          this.geotiff.push(L.leafletGeotiff(data).addTo(this.map));
+  updateGeotiff = async (geotiff, updatebasemap) => {
+    if (["satellites"].includes(updatebasemap[0]) || updatebasemap === true) {
+      if (updatebasemap[1] === "opacity") {
+        for (let i = 0; i < geotiff.length; i++) {
+          if (geotiff[i].display && this.geotiff[i] !== "") {
+            this.geotiff[i].changeOpacity(geotiff[i].opacity);
+          }
+        }
+      } else {
+        for (let i = 0; i < this.geotiff.length; i++) {
+          if (this.geotiff[i] !== "") {
+            this.geotiff[i].onRemove(this.map);
+          }
+        }
+        this.geotiff = [];
+        try {
+          for (let i = 0; i < geotiff.length; i++) {
+            if (geotiff[i].display) {
+              let data = await this.getGeotiff(geotiff[i].url);
+              this.geotiff.push(
+                L.leafletGeotiff(data, { opacity: geotiff[i].opacity }).addTo(
+                  this.map
+                )
+              );
+            } else {
+              this.geotiff.push("");
+            }
+          }
+        } catch (e) {
+          alert("Failed to plot Geotiff");
         }
       }
-    } catch (e) {
-      alert("Failed to plot Geotiff");
     }
   };
 
@@ -74,7 +92,11 @@ class Basemap extends Component {
           let data = await this.getGeoJSON(geojson[i].url);
           this.geojson.push(
             L.geoJSON(data, {
-              style: geojson[i].style,
+              style: {
+                color: geojson[i].color,
+                weight: geojson[i].weight,
+                fillOpacity: geojson[i].opacity,
+              },
             }).addTo(this.map)
           );
         }
@@ -204,7 +226,7 @@ class Basemap extends Component {
     if (updatebasemap) {
       this.updateBasemap(prevProps.basemap, basemap);
       this.updateGeoJSON(geojson);
-      this.updateGeotiff(geotiff);
+      this.updateGeotiff(geotiff, updatebasemap);
       finishUpdateBasemap();
     }
   }

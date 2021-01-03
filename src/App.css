@@ -172,12 +172,30 @@ a:hover {
   visibility: hidden;
 }
 
-.home .menu .selector .contents .content table.list {
+.home .menu .selector .contents .content .list {
   width: 100%;
   background-color: #f7fafb;
   margin: 5px 0px;
   padding: 5px;
   box-sizing: border-box;
+}
+
+.home .menu .selector .contents .content .list .MuiSlider-root {
+  color: rgb(25, 51, 73);
+}
+
+.home .menu .selector .contents .content .list table {
+  width: 100%;
+}
+
+.home .menu .selector .contents .content .list .settings {
+  padding: 0 10px 0 35px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.home .menu .selector .contents .content .list .settings .color {
+  padding-top: 5px;
 }
 
 .home .menu .selector .contents .content img.image {
@@ -414,6 +432,29 @@ a:hover {
   100% {
     transform: rotate(360deg);
   }
+}
+
+/* Color Selector */
+
+.color-selector {
+  width: 100%;
+}
+
+.color-selector .inner-color {
+  height: 20px;
+  display: inline-block;
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.color-selector .inner-color.active {
+  box-shadow: 0 0 0 2px rgb(25, 51, 73);
+  opacity: 1;
+}
+
+.color-selector .inner-color:hover {
+  box-shadow: 0 0 0 2px rgb(25, 51, 73);
+  opacity: 1;
 }
 
 /* Basemap Leaflet */
