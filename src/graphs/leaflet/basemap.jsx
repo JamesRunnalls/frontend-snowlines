@@ -236,7 +236,7 @@ class Basemap extends Component {
     return (
       <React.Fragment>
         <div id="map"></div>
-        <img src={Logo} alt="Snowlines Logo"/>
+        <img src={Logo} class="basemap-logo" alt="Snowlines Logo"/>
       </React.Fragment>
     );
   }
