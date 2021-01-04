@@ -259,6 +259,15 @@ a:hover {
   width: 100%;
 }
 
+.home .main .basemap img {
+  position: absolute;
+  right: 5px;
+  bottom: 20px;
+  z-index: 999;
+  width: 50px;
+  pointer-events: none;
+}
+
 /* Home - About */
 
 .home .about {

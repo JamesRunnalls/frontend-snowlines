@@ -5,6 +5,7 @@ import L from "leaflet";
 import "./leaflet_geotiff";
 import "./leaflet_colorpicker";
 import "./css/leaflet.css";
+import Logo from "./img/logo.svg";
 
 class Basemap extends Component {
   zoomIn = () => {
@@ -235,6 +236,7 @@ class Basemap extends Component {
     return (
       <React.Fragment>
         <div id="map"></div>
+        <img src={Logo} alt="Snowlines Logo"/>
       </React.Fragment>
     );
   }

@@ -2,14 +2,17 @@
 <html lang="en">
   <head>
     <meta property="title" content="Snowlines" />
-    <meta name="description" content="Daily snowline prediction for the Alps." />
+    <meta
+      name="description"
+      content="Daily snowline prediction for the Alps."
+    />
     <meta name="author" content="James Runnalls" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <meta name="google-site-verification" content="" />
     <meta name="viewport" content="width=device-width, user-scalable=no" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="script-src 'self' 'unsafe-inline' snowlines.ch"
+      content="script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://www.googletagmanager.com https://google-analytics.com https://snowlines.ch; object-src 'self'"
     />
     <style>
       .fade-in {
@@ -65,7 +68,7 @@
       }
 
       .progress {
-        background-color: rgb(169, 169, 169);
+        background-color: rgb(198, 211, 216);
         justify-content: flex-start;
         border-radius: 100px;
         align-items: center;
@@ -80,9 +83,9 @@
 
       .progress-value {
         animation: load 10s normal forwards infinite;
-        box-shadow: 0 10px 40px -10px #000;
+        box-shadow: 0 10px 40px -10px rgb(25, 51, 73);
         border-radius: 100px;
-        background: #000;
+        background: rgb(25, 51, 73);
         height: 5px;
         width: 0;
       }
@@ -105,21 +108,23 @@
       }
 
       .loading-logo {
-        width: 300px;
+        width: 200px;
         max-width: 70%;
       }
 
       .loading-text {
         margin-top: 30px;
-        font-family: "The Serif Bold", Arial, sans-serif;
+        color: rgb(25, 51, 73);
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 26px;
       }
     </style>
   </head>
   <body>
     <div id="root">
       <div class="pagecenter">
-        <img src="/img/logo3.png" class="loading-logo fade-in" />
-        <div class="loading-text fade-in">Loading Snowlines</div>
+        <img src="/img/logo.svg" class="loading-logo fade-in" />
+        <div class="loading-text fade-in">Snowlines is loading...</div>
         <div class="progress">
           <div class="progress-value"></div>
         </div>
