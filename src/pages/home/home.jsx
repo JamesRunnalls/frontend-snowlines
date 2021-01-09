@@ -26,6 +26,7 @@ class Home extends Component {
     menu: window.screen.width < 900 ? false : true,
     about: false,
     updatebasemap: false,
+    modal: true,
   };
 
   compare = (a, b) => {
@@ -229,6 +230,10 @@ class Home extends Component {
     );
   }
 
+  closeModal = () => {
+    this.setState({ modal: false });
+  };
+
   render() {
     document.title = "Snowlines";
     var {
@@ -245,9 +250,43 @@ class Home extends Component {
       about,
       snowlines,
       satellites,
+      modal,
     } = this.state;
     return (
       <div className="home">
+        {modal && (
+          <div className="modal">
+            <div className="close" onClick={this.closeModal} title="Close">
+              &#215;
+            </div>
+            <h2>Thanks for visiting Snowlines.ch</h2>
+            <p>
+              As keen ski tourers, we started this project to use satellite data
+              to map snow cover across Switzerland, to avoid showing up to ski
+              and being faced with bare, grassy slopes.
+            </p>
+            <p>
+              However we recently discovered that the guys at{" "}
+              <a href="https://exolabs-ch.gitbook.io/cosmos/">Exolabs</a> have
+              done an excellent job of making our work obsolete and we highly
+              recommend you check out their{" "}
+              <a href="https://play.google.com/store/apps/details?id=com.exosnow">
+                app
+              </a>{" "}
+              in order to get access to daily snow cover predictions at a crazy
+              resolution.
+            </p>
+            <p>
+              If you're interested in the open source code behind this project
+              please check out the learn more section at the bottom of the menu.
+            </p>
+            <p>Happy skiing</p>
+            <p>
+              <a href="https://github.com/lekah" title="Check out Leo's GitHub">Leo</a> &{" "}
+              <a href="https://github.com/JamesRunnalls" title="Check out James' GitHub">James</a>
+            </p>
+          </div>
+        )}
         <div className={menu ? "menu open" : "menu closed"}>
           <div className="boundary" />
           <Menu
